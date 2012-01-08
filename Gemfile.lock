@@ -6,6 +6,7 @@ GEM
       ffi (~> 1.0.6)
     ffi (1.0.11)
     multi_json (1.0.4)
+    nokogiri (1.5.0)
     rubyzip (0.9.5)
     selenium-webdriver (2.16.0)
       childprocess (>= 0.2.5)
@@ -20,4 +21,5 @@ PLATFORMS
 
 DEPENDENCIES
   bench (> 0.0.0)
+  nokogiri (> 0.0.0)
   watir-webdriver (> 0.2.4)

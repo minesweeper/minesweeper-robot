@@ -1,5 +1,6 @@
 require 'watir-webdriver'
 require 'bench'
+require 'nokogiri'
 
 class Field
   def table_to_field table
@@ -24,9 +25,25 @@ class Field
       field << a_row
     end
   end
+
+  def table_html_to_field html
+    field = []
+    doc = Nokogiri::HTML html
+    doc.css('tr').each do |row|
+      a_row = []
+      row.css('td').each do |col|
+        a_row << col[:class]
+      end
+      field << a_row
+    end
+    field
+  end
+
+
 end
 
 field = Field.new
+Watir::always_locate = false
 b = Watir::Browser.start 'file:///Users/alscott/Projects/minesweeper/index.html'
 number_rows = b.div(:id => 'minesweeper').table.rows.count
 number_cols = b.div(:id => 'minesweeper').table.row.cells.count
@@ -37,6 +54,10 @@ end
 
 benchmark 'iterate' do
   field.iterate_over_table_to_field b, number_rows, number_cols
+end
+
+benchmark 'nokogiri' do
+  field.table_html_to_field b.div(:id => 'minesweeper').table.html
 end
 
 run 1
