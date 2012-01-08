@@ -1,6 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    bench (1.0.0)
     childprocess (0.2.6)
       ffi (~> 1.0.6)
     ffi (1.0.11)
@@ -18,4 +19,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bench (> 0.0.0)
   watir-webdriver (> 0.2.4)
