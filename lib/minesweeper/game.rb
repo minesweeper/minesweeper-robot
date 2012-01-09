@@ -12,7 +12,6 @@ class Minesweeper::Game
   def reset options
     @browser.refresh
     @browser.execute_script "FieldPresenter.append('#minesweepers', #{options.to_json});"
-    self
   end
 
   def field
