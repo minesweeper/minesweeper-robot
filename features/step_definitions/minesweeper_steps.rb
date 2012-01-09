@@ -15,6 +15,10 @@ Then /^I should win$/ do
   Minesweeper.game.should be_won
 end
 
+Then /^I should lose$/ do
+  Minesweeper.game.should be_lost
+end
+
 Then /^I should see the game$/ do |field_string|
   map = Hash[*%w{. unclicked * mine}]
   (0..9).each {|index| map[index.to_s] = "mines#{index}"}

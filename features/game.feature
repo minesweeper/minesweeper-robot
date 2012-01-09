@@ -25,3 +25,17 @@ Scenario: The user starts a game and then immediately wins
   """
   1 .
   """
+
+Scenario: The user starts a game and then immediately loses
+  Given the field
+  """
+  . * .
+
+  """
+  When I click on the cell in the 1st row and 1st column
+  When I click on the cell in the 1st row and 2nd column
+  Then I should lose
+  And I should see the game
+  """
+  1 * .
+  """
