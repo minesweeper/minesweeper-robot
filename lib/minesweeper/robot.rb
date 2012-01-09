@@ -7,6 +7,11 @@ class Minesweeper::Robot
     @game = game
   end
 
+  def obvious_mines
+    @game.field
+    [[1, 1]]
+  end
+
   def play
   end
 end
