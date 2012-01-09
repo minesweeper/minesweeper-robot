@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+$: << File.dirname(__FILE__)+'/../lib'
+
+require 'minesweeper/robot'
+
+Minesweeper::Robot.new(Minesweeper::Game.new).play

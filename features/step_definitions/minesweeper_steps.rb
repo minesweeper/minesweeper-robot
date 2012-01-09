@@ -20,9 +20,5 @@ Then /^I should lose$/ do
 end
 
 Then /^I should see the game$/ do |field_string|
-  map = Hash[*%w{. unclicked * mine}]
-  (0..9).each {|index| map[index.to_s] = "mines#{index}"}
-  Minesweeper.game.field.should == field_string.split("\n").map do |row|
-    row.split.map {|cell| map[cell]}
-  end
+  Minesweeper.game.field.should == Minesweeper::Game.string_to_field(field_string)
 end

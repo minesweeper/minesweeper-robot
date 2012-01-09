@@ -5,6 +5,15 @@ require 'json'
 module Minesweeper; end
 
 class Minesweeper::Game
+  MAP = Hash[*%w{. unclicked * mine}]
+  (0..9).each {|index| MAP[index.to_s] = "mines#{index}"}
+
+  def self.string_to_field field_string
+    field_string.split("\n").map do |row|
+      row.split.map {|cell| MAP[cell]}
+    end
+  end
+
   def initialize
     @browser = Watir::Browser.start 'minesweeper.github.com?blank=true'
   end
@@ -22,18 +31,32 @@ class Minesweeper::Game
   end
 
   def click row, col
-    @browser.td(id: "g1r#{row}c#{col}").click
+    cell(row,col).click
+  end
+
+  def right_click row, col
+    cell(row,col).right_click
   end
 
   def won?
-    true
+    status? 'status won'
   end
 
   def lost?
-    true
+    status? 'status dead'
   end
 
   def destroy
     @browser.close
+  end
+
+  private
+
+  def status? status
+    @browser.span(id: 'g1indicator').class_name == status
+  end
+
+  def cell row, col
+    @browser.td(id: "g1r#{row}c#{col}")
   end
 end
