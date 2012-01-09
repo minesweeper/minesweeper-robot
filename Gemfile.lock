@@ -6,6 +6,7 @@ GEM
       ffi (~> 1.0.6)
     diff-lcs (1.1.3)
     ffi (1.0.11)
+    json (1.6.4)
     multi_json (1.0.4)
     nokogiri (1.5.0)
     rspec (2.8.0)
@@ -30,6 +31,7 @@ PLATFORMS
 
 DEPENDENCIES
   bench
+  json
   nokogiri
   rspec
   watir-webdriver
