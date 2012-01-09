@@ -73,4 +73,33 @@ describe Minesweeper::FieldAnalyser do
       [2,0,'mine'  ],[2,1,'mines2'],[2,2,'unclicked'],
     ]
   end
+
+  it 'should determine neighbours of a given status' do
+    field <<-EOF
+    * 1 .
+    2 . .
+    * 2 .
+    EOF
+    @analyser.neighbours_of_status(0,0,'mines1').should == [[0,1]]
+    @analyser.neighbours_of_status(0,0,'mines2').should == [[1,0]]
+    @analyser.neighbours_of_status(0,0,'unclicked').should == [[1,1]]
+    @analyser.neighbours_of_status(0,0,'mine').should == []
+    @analyser.neighbours_of_status(0,1,'mine').should == [[0,0]]
+    @analyser.neighbours_of_status(0,1,'unclicked').should == [[0,2],[1,1],[1,2]]
+    @analyser.neighbours_of_status(0,1,'mines2').should == [[1,0]]
+    @analyser.neighbours_of_status(2,2,'mines2').should == [[2,1]]
+    @analyser.neighbours_of_status(2,2,'unclicked').should == [[1,1],[1,2]]
+  end
+
+  it 'should determine safe cells to left click' do
+    field <<-EOF
+    * 1 .
+    2 . .
+    * 2 .
+    EOF
+    @analyser.safe_cells_to_click.should == [
+              [0,2],
+        [1,1],[1,2]
+    ]
+  end
 end

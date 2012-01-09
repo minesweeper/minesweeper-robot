@@ -39,7 +39,6 @@ class Field
     field
   end
 
-
 end
 
 field = Field.new
