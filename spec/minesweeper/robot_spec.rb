@@ -3,8 +3,9 @@ $: << File.dirname(__FILE__)+'/../../lib'
 require 'minesweeper/robot'
 
 describe Minesweeper::Robot do
+  let(:game) { stub 'game' }
+
   it 'should detect obvious mines' do
-    game = stub 'game'
     player = Minesweeper::Robot.new game
     game.should_receive(:field).and_return Minesweeper::Game.string_to_field <<-EOF
     1 1 .
