@@ -18,4 +18,8 @@ describe Minesweeper::CellSequence do
   it 'should provide a filter on unclicked cells' do
     sequence.unclicked.count.should == 3
   end
+
+  it 'should provide a filter on mined cells' do
+    sequence.mine.count.should == 2
+  end
 end
