@@ -29,6 +29,10 @@ class Minesweeper::Game
     true
   end
 
+  def lost?
+    true
+  end
+
   def destroy
     @browser.close
   end
