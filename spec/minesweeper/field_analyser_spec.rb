@@ -37,4 +37,16 @@ describe Minesweeper::FieldAnalyser do
       [2,0],[2,1],[2,2],
     ]
   end
+
+  it 'should get neighbour coordinates for a top left cell' do
+    field <<-EOF
+    . .
+    . .
+    EOF
+    @analyser.neighbours_of(0,0).should == [
+            [0,1],
+      [1,0],[1,1]
+    ]
+  end
+
 end
