@@ -20,6 +20,6 @@ describe Minesweeper::CellSequence do
   end
 
   it 'should provide a filter on mined cells' do
-    sequence.mine.count.should == 2
+    sequence.mined.count.should == 2
   end
 end
