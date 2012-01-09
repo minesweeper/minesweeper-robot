@@ -7,7 +7,7 @@ describe Minesweeper::Robot do
   let(:robot) { Minesweeper::Robot.new game } 
 
   def field field_string
-    game.should_receive(:field).and_return Minesweeper::Game.string_to_field field_string
+    game.should_receive(:field).and_return Minesweeper.string_to_field field_string
   end
 
   it 'should detect obvious mines with 1 adjacent' do

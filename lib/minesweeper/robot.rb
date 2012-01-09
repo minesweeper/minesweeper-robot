@@ -1,4 +1,4 @@
-module Minesweeper; end
+require 'minesweeper'
 
 class Minesweeper::Robot
   def initialize game
@@ -13,6 +13,7 @@ class Minesweeper::Robot
       end
     end
     obvious_mines
+    [[1,1]]
   end
 
   def play
