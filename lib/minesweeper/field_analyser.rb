@@ -20,4 +20,11 @@ class Minesweeper::FieldAnalyser
     end
     neighbours
   end
+
+  def neighbour_statuses_of row, col
+    neighbours_of(row,col).map do |neighbour|
+      r,c = *neighbour
+      [r,c,@field[r][c]]
+    end
+  end
 end

@@ -60,4 +60,17 @@ describe Minesweeper::FieldAnalyser do
       [2,1]
     ]
   end
+
+  it 'should get neighbour statuses' do
+    field <<-EOF
+    * 1 .
+    2 . .
+    * 2 .
+    EOF
+    @analyser.neighbour_statuses_of(1,1).should == [
+      [0,0,'mine'  ],[0,1,'mines1'],[0,2,'unclicked'],
+      [1,0,'mines2'],               [1,2,'unclicked'],
+      [2,0,'mine'  ],[2,1,'mines2'],[2,2,'unclicked'],
+    ]
+  end
 end
