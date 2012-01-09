@@ -15,7 +15,7 @@ class Minesweeper::FieldAnalyser
     neighbours = []
     (rl..ru).map do |r|
       (cl..cu).map do |c|
-        neighbours << [r,c] unless (row == r and col == c) or r < 0 or c < 0
+        neighbours << [r,c] unless (row == r and col == c) or r < 0 or c < 0 or r >= @rows or c >= @cols
       end
     end
     neighbours

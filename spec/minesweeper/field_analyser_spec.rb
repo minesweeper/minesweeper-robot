@@ -49,4 +49,15 @@ describe Minesweeper::FieldAnalyser do
     ]
   end
 
+  it 'should get neighbour coordinates for a bottom right cell' do
+    field <<-EOF
+    . . .
+    . . .
+    . . .
+    EOF
+    @analyser.neighbours_of(2,2).should == [
+      [1,1],[1,2],
+      [2,1]
+    ]
+  end
 end
