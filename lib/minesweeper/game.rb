@@ -17,7 +17,7 @@ class Minesweeper::Game
   def field
     table = Nokogiri::HTML @browser.div(:id, 'g1').table.html
     table.css('tr').map do |row|
-      row.css('td').map {|cell| cell[:class].to_sym }
+      row.css('td').map {|cell| cell[:class] }
     end
   end
 

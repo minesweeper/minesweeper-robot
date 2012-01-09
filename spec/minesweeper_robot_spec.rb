@@ -23,15 +23,25 @@ describe Minesweeper::Robot do
     game.reset rows: lines.length, cols: lines.map(&:length).max, mines: mines, mineCount: mines.length
   end
 
+  def should_have_field field_string
+    map = {
+      '?' => 'unclicked'
+    }
+    (0..9).each {|index| map[index.to_s] = "mines#{index}"}
+    game.field.should == field_string.split("\n").map do |row|
+      row.split.map {|cell| map[cell]}
+    end
+  end
+
   it 'should get initial field containing only unknown status' do
     with_game <<-EOF
     . .
     . .
     EOF
-    game.field.should == [
-      [:unclicked, :unclicked],
-      [:unclicked, :unclicked]
-    ]
+    should_have_field <<-EOF
+    ? ?
+    ? ?
+    EOF
   end
 
   it 'should win the game if the mine is clicked' do
@@ -39,9 +49,9 @@ describe Minesweeper::Robot do
     . *
     EOF
     game.click 0, 0
-    game.field.should == [
-      [:mines1, :unclicked]
-    ]
+    should_have_field <<-EOF
+    1 ?
+    EOF
     game.should be_won
   end
 end
