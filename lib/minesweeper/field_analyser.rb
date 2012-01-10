@@ -28,11 +28,9 @@ class Minesweeper::FieldAnalyser
   end
 
   def neighbours_of row, col
-    rl,ru=row-1,row+1
-    cl,cu=col-1,col+1
     neighbours = []
-    (rl..ru).map do |r|
-      (cl..cu).map do |c|
+    (row-1..row+1).map do |r|
+      (col-1..col+1).map do |c|
         neighbours << [r,c,@field[r][c]] unless (row == r and col == c) or r < 0 or c < 0 or r >= @rows or c >= @cols
       end
     end
