@@ -1,14 +1,15 @@
 $: << File.dirname(__FILE__)+'/../../lib'
 
-require 'minesweeper/cell_sequence'
+require 'minesweeper/field_analyser'
 
 describe Minesweeper::CellSequence do
   let :sequence do
-    Minesweeper::CellSequence.new [
-      [0,0,'mine'  ],[0,1,'mines1'],[0,2,'unclicked'],
-      [1,0,'mines2'],               [1,2,'unclicked'],
-      [2,0,'mine'  ],[2,1,'mines2'],[2,2,'unclicked']
-    ]
+    field = Minesweeper.string_to_field <<-EOF
+    * 1 . .
+    2 . . .
+    * 2 . .
+    EOF
+    sequence = Minesweeper::FieldAnalyser.new(field).neighbours_of 1, 1
   end
 
   it 'should provide a count' do
@@ -16,7 +17,6 @@ describe Minesweeper::CellSequence do
   end
 
   it 'should provide a filter on unclicked cells' do
-    
     sequence.unclicked.count.should == 3
   end
 

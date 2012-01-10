@@ -34,13 +34,18 @@ class Minesweeper::Robot
   def play_game rows, cols, mines
     while true
       return if @game.won? or @game.lost?
-      @game.click *field.unclicked.first
+      field.obvious_mines.each {|mine| @game.right_click *mine }
+      @game.click *next_cell
     end
+  end
+
+  def next_cell    
+    field.unclicked.first
   end
 
   private
 
   def field
-    Minesweeper::FieldAnalyser.new(@game.field).all
+    Minesweeper::FieldAnalyser.new @game.field
   end
 end

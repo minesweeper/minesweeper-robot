@@ -1,12 +1,22 @@
 require 'minesweeper/cell_sequence'
 
 class Minesweeper::FieldAnalyser
+  include Enumerable
+
   attr_reader :rows, :cols
 
   def initialize field
     @field = field
     @rows = field.length
     @cols = field.map(&:length).max
+  end
+
+  def each
+    @rows.times do |row|
+      @cols.times do |col|
+        yield row, col, @field[row][col]
+      end
+    end
   end
 
   def all
@@ -16,7 +26,7 @@ class Minesweeper::FieldAnalyser
         cells << [r,c,@field[r][c]]
       end
     end
-    Minesweeper::CellSequence.new cells
+    Minesweeper::CellSequence.new self, cells
   end
 
   def neighbours_of row, col
@@ -28,7 +38,7 @@ class Minesweeper::FieldAnalyser
         neighbours << [r,c,@field[r][c]] unless (row == r and col == c) or r < 0 or c < 0 or r >= @rows or c >= @cols
       end
     end
-    Minesweeper::CellSequence.new neighbours
+    Minesweeper::CellSequence.new self, neighbours
   end
 
   def safe_cells_to_click
@@ -43,6 +53,19 @@ class Minesweeper::FieldAnalyser
       end
     end
     safe_cells.uniq
+  end
+
+  def obvious_mines
+    cells = []
+    each do |row, col, status|
+      if status =~ /mines(\d)/
+        mine_count = $1.to_i
+        current_mine_count = neighbours_of(row,col).mined.count
+        unclicked_neighbours = neighbours_of(row,col).unclicked
+        cells += unclicked_neighbours.all if mine_count == (current_mine_count + unclicked_neighbours.count)
+      end
+    end
+    cells.uniq
   end
 
   def neighbours_of_status row, col, status

@@ -7,6 +7,15 @@ describe Minesweeper::FieldAnalyser do
     @analyser = Minesweeper::FieldAnalyser.new Minesweeper.string_to_field field_string
   end
 
+  it 'should iterate over all cells' do
+    field <<-EOF
+    * 1
+    EOF
+    @analyser.to_a.should == [
+      [0,0,'mine'],[0,1,'mines1']
+    ]
+  end
+
   it 'should determine row length' do
     field <<-EOF
     . .
@@ -101,5 +110,13 @@ describe Minesweeper::FieldAnalyser do
               [0,2],
         [1,1],[1,2]
     ]
+  end
+
+  it 'should detect an obvious mine' do
+    field <<-EOF
+    . 1
+    1 1
+    EOF
+    @analyser.obvious_mines.should == [[0,0]]
   end
 end

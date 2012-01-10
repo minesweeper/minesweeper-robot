@@ -3,8 +3,8 @@ require 'minesweeper'
 class Minesweeper::CellSequence
   attr_reader :cells
 
-  def initialize cells
-    @cells = cells
+  def initialize field, cells
+    @field, @cells = field, cells
   end
 
   def all
@@ -21,10 +21,10 @@ class Minesweeper::CellSequence
   end
 
   def unclicked
-    Minesweeper::CellSequence.new @cells.select {|cell| cell[2] == 'unclicked'}
+    Minesweeper::CellSequence.new @field, @cells.select {|cell| cell[2] == 'unclicked'}
   end
 
   def mined
-    Minesweeper::CellSequence.new @cells.select {|cell| cell[2] == 'mine'}
+    Minesweeper::CellSequence.new @field, @cells.select {|cell| cell[2] == 'mine'}
   end
 end
