@@ -119,4 +119,22 @@ describe Minesweeper::FieldAnalyser do
     EOF
     @analyser.obvious_mines.should == [[0,0]]
   end
+
+  it 'should detect an obvious mine' do
+    field <<-EOF
+    . 2 .
+    1 2 1
+    . . .
+    EOF
+    @analyser.obvious_mines.should == [[0,0], [0,2]]
+  end
+
+  it 'should detect an obvious mine' do
+    field <<-EOF
+    . 1 .
+    2 3 2
+    1 . .
+    EOF
+    @analyser.obvious_mines.should == [[0,0], [2,1]]
+  end
 end
