@@ -13,12 +13,16 @@ class Minesweeper::FieldAnalyser
     @size = rows * cols
   end
 
-  def marked_mines
-    count {|r,c,status| status == 'marked' }
+  def count_for_status status
+    count {|r,c,s| s == status }
+  end
+
+  def remaining_mine_count
+    mines - count_for_status('marked')
   end
 
   def probability_of_mine_at row, col
-    mines.to_f/@size.to_f
+    remaining_mine_count.to_f/count_for_status('unclicked')
   end
 
   def each

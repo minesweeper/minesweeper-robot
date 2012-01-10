@@ -8,18 +8,20 @@ describe Minesweeper::FieldAnalyser do
     @analyser = Minesweeper::FieldAnalyser.new field, mines
   end
 
-  it 'should calculate marked mines' do
-    field <<-EOF
-    * 1
+  it 'should calculate mine placement probability when there are no marked mines' do
+    field <<-EOF, 1
+    . .
+    . .
     EOF
-    @analyser.marked_mines.should == 1
+    @analyser.probability_of_mine_at(0,0).should be_within(0.001).of(0.25)
   end
 
-  it 'should calculate mine placement probability' do
-    field <<-EOF
-    . . .
+  it 'should calculate mine placement probability when there are marked mines' do
+    field <<-EOF, 2
+    . .
+    . *
     EOF
-    @analyser.probability_of_mine_at(0,1).should be_within(0.01).of(0.33)
+    @analyser.probability_of_mine_at(0,0).should be_within(0.001).of(0.333)
   end
 
   it 'should iterate over all cells' do
