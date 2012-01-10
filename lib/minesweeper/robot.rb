@@ -17,9 +17,11 @@ class Minesweeper::Robot
   end
 
   def play options={}
-    rows = options[:rows] || 8
-    cols = options[:cols] || 8
-    mines = options[:mines] || 4
+    beginner =     {rows: 9,  cols: 9,  mineCount: 10}
+    intermediate = {rows: 16, cols: 16, mineCount: 40}
+    expert =       {rows: 16, cols: 30, mineCount: 99}
+    options = intermediate.merge options
+    rows,cols,mines = *%w{rows cols mineCount}.map {|key| options[key.to_sym] }
     won = 0
     lost = 0
     while true
@@ -36,15 +38,9 @@ class Minesweeper::Robot
     while true
       return if @game.won? or @game.lost?
       puts "Turn #{turn}"
-      while true
-        obvious_mines = field.obvious_mines
-        if obvious_mines.empty?
-          puts "No obvious mines"
-          break
-        end
-        puts "Marking obvious mines #{obvious_mines.inspect}"
-        obvious_mines.each { |mine| @game.right_click *mine }
-      end
+      obvious_mines = field.obvious_mines
+      puts "Marking obvious mines #{obvious_mines.inspect}"
+      obvious_mines.each { |mine| @game.right_click *mine }
       @game.click *next_cell
       turn += 1
     end
