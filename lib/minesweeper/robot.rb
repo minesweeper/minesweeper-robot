@@ -26,14 +26,14 @@ class Minesweeper::Robot
     lost = 0
     while true
       @game.reset rows: rows, cols: cols, mineCount: mines
-      play_game rows, cols, mines
+      make_move rows, cols, mines
       won += 1 if @game.won?
       lost += 1 if @game.lost?
       puts "won: #{won}, lost: #{lost}"
     end
   end
 
-  def play_game rows, cols, mines
+  def make_move rows, cols, mines
     turn = 0
     while true
       return if @game.won? or @game.lost?
