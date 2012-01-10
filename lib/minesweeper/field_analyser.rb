@@ -3,16 +3,22 @@ require 'minesweeper/cell_sequence'
 class Minesweeper::FieldAnalyser
   include Enumerable
 
-  attr_reader :rows, :cols
+  attr_reader :rows, :cols, :mines
 
-  def initialize field
+  def initialize field,mines=1
+    @mines = mines
     @field = field
     @rows = field.length
     @cols = field.map(&:length).max
+    @size = rows * cols
   end
 
   def marked_mines
     count {|r,c,status| status == 'marked' }
+  end
+
+  def probability_of_mine_at row, col
+    mines.to_f/@size.to_f
   end
 
   def each

@@ -3,8 +3,9 @@ $: << File.dirname(__FILE__)+'/../../lib'
 require 'minesweeper/field_analyser'
 
 describe Minesweeper::FieldAnalyser do
-  def field field_string
-    @analyser = Minesweeper::FieldAnalyser.new Minesweeper.string_to_field field_string
+  def field field_string, mines=1
+    field = Minesweeper.string_to_field field_string
+    @analyser = Minesweeper::FieldAnalyser.new field, mines
   end
 
   it 'should calculate marked mines' do
@@ -12,6 +13,13 @@ describe Minesweeper::FieldAnalyser do
     * 1
     EOF
     @analyser.marked_mines.should == 1
+  end
+
+  it 'should calculate mine placement probability' do
+    field <<-EOF
+    . . .
+    EOF
+    @analyser.probability_of_mine_at(0,1).should be_within(0.01).of(0.33)
   end
 
   it 'should iterate over all cells' do
