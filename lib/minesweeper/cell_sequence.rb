@@ -1,8 +1,19 @@
 require 'minesweeper'
 
 class Minesweeper::CellSequence
+  attr_reader :cells
+
   def initialize cells
     @cells = cells
+  end
+
+  def all
+    @cells.map {|cell| [cell[0], cell[1]]}
+  end
+
+  def first
+    f = @cells.first
+    [f[0],f[1]]
   end
 
   def count

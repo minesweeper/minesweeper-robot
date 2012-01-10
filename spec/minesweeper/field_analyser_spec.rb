@@ -31,7 +31,7 @@ describe Minesweeper::FieldAnalyser do
     . . .
     . . .
     EOF
-    @analyser.neighbours_of(1,1).should == [
+    @analyser.neighbours_of(1,1).all.should == [
       [0,0],[0,1],[0,2],
       [1,0],      [1,2],
       [2,0],[2,1],[2,2],
@@ -43,7 +43,7 @@ describe Minesweeper::FieldAnalyser do
     . .
     . .
     EOF
-    @analyser.neighbours_of(0,0).should == [
+    @analyser.neighbours_of(0,0).all.should == [
             [0,1],
       [1,0],[1,1]
     ]
@@ -55,7 +55,7 @@ describe Minesweeper::FieldAnalyser do
     . . .
     . . .
     EOF
-    @analyser.neighbours_of(2,2).should == [
+    @analyser.neighbours_of(2,2).all.should == [
       [1,1],[1,2],
       [2,1]
     ]
@@ -67,7 +67,7 @@ describe Minesweeper::FieldAnalyser do
     2 . .
     * 2 .
     EOF
-    @analyser.neighbour_statuses_of(1,1).should == [
+    @analyser.neighbours_of(1,1).cells.should == [
       [0,0,'mine'  ],[0,1,'mines1'],[0,2,'unclicked'],
       [1,0,'mines2'],               [1,2,'unclicked'],
       [2,0,'mine'  ],[2,1,'mines2'],[2,2,'unclicked'],

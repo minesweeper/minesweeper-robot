@@ -1,4 +1,4 @@
-require 'minesweeper'
+require 'minesweeper/field_analyser'
 
 class Minesweeper::Robot
   def initialize game
@@ -23,6 +23,7 @@ class Minesweeper::Robot
     won = 0
     lost = 0
     while true
+      @game.reset rows: rows, cols: cols, mineCount: mines
       play_game rows, cols, mines
       won += 1 if @game.won?
       lost += 1 if @game.lost?
@@ -31,18 +32,15 @@ class Minesweeper::Robot
   end
 
   def play_game rows, cols, mines
-    @game.reset rows: rows, cols: cols, mineCount: mines
-    (0...rows).each do |row|
-      (0...cols).each do |col|
-        return if @game.won? or @game.lost? 
-        @game.click row, col
-      end
+    while true
+      return if @game.won? or @game.lost?
+      @game.click *field.unclicked.first
     end
   end
 
   private
 
-  def neighbours_of row, col
-    2
+  def field
+    Minesweeper::FieldAnalyser.new(@game.field).all
   end
 end
