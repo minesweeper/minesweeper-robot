@@ -16,7 +16,28 @@ class Minesweeper::Robot
     [[1,1]]
   end
 
-  def play
+  def play options={}
+    rows = options[:rows] || 8
+    cols = options[:cols] || 8
+    mines = options[:mines] || 4
+    won = 0
+    lost = 0
+    while true
+      play_game rows, cols, mines
+      won += 1 if @game.won?
+      lost += 1 if @game.lost?
+      puts "won: #{won}, lost: #{lost}"
+    end
+  end
+
+  def play_game rows, cols, mines
+    @game.reset rows: rows, cols: cols, mineCount: mines
+    (0...rows).each do |row|
+      (0...cols).each do |col|
+        return if @game.won? or @game.lost? 
+        @game.click row, col
+      end
+    end
   end
 
   private

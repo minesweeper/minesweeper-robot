@@ -3,5 +3,6 @@
 $: << File.dirname(__FILE__)+'/../lib'
 
 require 'minesweeper/robot'
+require 'minesweeper/game'
 
 Minesweeper::Robot.new(Minesweeper::Game.new).play
