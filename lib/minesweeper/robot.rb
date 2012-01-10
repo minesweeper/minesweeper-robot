@@ -32,15 +32,33 @@ class Minesweeper::Robot
   end
 
   def play_game rows, cols, mines
+    turn = 0
     while true
       return if @game.won? or @game.lost?
-      field.obvious_mines.each {|mine| @game.right_click *mine }
+      puts "Turn #{turn}"
+      while true
+        obvious_mines = field.obvious_mines
+        if obvious_mines.empty?
+          puts "No obvious mines"
+          break
+        end
+        puts "Marking obvious mines #{obvious_mines.inspect}"
+        obvious_mines.each { |mine| @game.right_click *mine }
+      end
       @game.click *next_cell
+      turn += 1
     end
   end
 
-  def next_cell    
-    field.unclicked.first
+  def next_cell
+    safe_cells = field.safe_cells_to_click
+    unless safe_cells.empty?
+      puts "Clicking safe cell #{safe_cells.first.inspect}"
+      return safe_cells.first
+    end
+    all = field.all.unclicked
+    puts "Clicking next cell #{all.first.inspect} (no safe cells)"
+    all.first
   end
 
   private

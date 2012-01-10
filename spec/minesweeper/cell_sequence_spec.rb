@@ -20,7 +20,7 @@ describe Minesweeper::CellSequence do
     sequence.unclicked.count.should == 3
   end
 
-  it 'should provide a filter on mined cells' do
-    sequence.mined.count.should == 2
+  it 'should provide a filter on marked cells' do
+    sequence.marked.count.should == 2
   end
 end

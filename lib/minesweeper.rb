@@ -1,5 +1,5 @@
 module Minesweeper
-  MAP = Hash[*%w{. unclicked * mine}]
+  MAP = Hash[*%w{. unclicked * marked}]
   (0..9).each {|index| MAP[index.to_s] = "mines#{index}"}
 
   def self.string_to_field field_string

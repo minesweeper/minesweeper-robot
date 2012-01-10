@@ -24,7 +24,7 @@ class Minesweeper::CellSequence
     Minesweeper::CellSequence.new @field, @cells.select {|cell| cell[2] == 'unclicked'}
   end
 
-  def mined
-    Minesweeper::CellSequence.new @field, @cells.select {|cell| cell[2] == 'mine'}
+  def marked
+    Minesweeper::CellSequence.new @field, @cells.select {|cell| cell[2] == 'marked'}
   end
 end
