@@ -24,13 +24,7 @@ class Minesweeper::FieldAnalyser
   end
 
   def all
-    cells = []
-    (0...@rows).map do |r|
-      (0...@cols).map do |c|
-        cells << [r,c,@field[r][c]]
-      end
-    end
-    Minesweeper::CellSequence.new self, cells
+    Minesweeper::CellSequence.new self, to_a
   end
 
   def neighbours_of row, col
