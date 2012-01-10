@@ -20,5 +20,5 @@ Then /^I should lose$/ do
 end
 
 Then /^I should see the game$/ do |field_string|
-  Minesweeper.game.field.should == Minesweeper::Game.string_to_field(field_string)
+  Minesweeper.game.field.should == Minesweeper.string_to_field(field_string)
 end

@@ -7,6 +7,13 @@ describe Minesweeper::FieldAnalyser do
     @analyser = Minesweeper::FieldAnalyser.new Minesweeper.string_to_field field_string
   end
 
+  it 'should calculate marked mines' do
+    field <<-EOF
+    * 1
+    EOF
+    @analyser.marked_mines.should == 1
+  end
+
   it 'should iterate over all cells' do
     field <<-EOF
     * 1

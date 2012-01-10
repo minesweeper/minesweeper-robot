@@ -38,9 +38,9 @@ class Minesweeper::Robot
     while true
       return if @game.won? or @game.lost?
       puts "Turn #{turn}"
-      obvious_mines = field.obvious_mines
-      puts "Marking obvious mines #{obvious_mines.inspect}"
-      obvious_mines.each { |mine| @game.right_click *mine }
+      field.obvious_mines.tap {|it| puts "Marking obvious mines #{it.inspect}"}.each do |mine|
+        @game.right_click *mine
+      end
       @game.click *next_cell
       turn += 1
     end
@@ -52,9 +52,7 @@ class Minesweeper::Robot
       puts "Clicking safe cell #{safe_cells.first.inspect}"
       return safe_cells.first
     end
-    all = field.all.unclicked
-    puts "Clicking next cell #{all.first.inspect} (no safe cells)"
-    all.first
+    field.all.unclicked.tap {|it| puts "Clicking next cell #{it.first.inspect} (no safe cells)"}.first
   end
 
   private

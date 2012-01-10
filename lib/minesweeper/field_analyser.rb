@@ -3,12 +3,13 @@ require 'minesweeper/cell_sequence'
 class Minesweeper::FieldAnalyser
   include Enumerable
 
-  attr_reader :rows, :cols
+  attr_reader :rows, :cols, :marked_mines
 
   def initialize field
     @field = field
     @rows = field.length
     @cols = field.map(&:length).max
+    @marked_mines = select {|cell| cell[2] == 'marked' }.length
   end
 
   def each

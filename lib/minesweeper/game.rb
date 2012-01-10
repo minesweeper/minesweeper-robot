@@ -1,8 +1,7 @@
+require 'minesweeper'
 require 'watir-webdriver'
 require 'nokogiri'
 require 'json'
-
-module Minesweeper; end
 
 class Minesweeper::Game
   MAP = Hash[*%w{. unclicked * mine}]
