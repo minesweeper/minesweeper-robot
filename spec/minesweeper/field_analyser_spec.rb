@@ -24,6 +24,22 @@ describe Minesweeper::FieldAnalyser do
     @analyser.probability_of_mine_at(0,0).should be_within(0.001).of(0.333)
   end
 
+  it 'should calculate mine placement probability considering adjacent revealed cells' do
+    field <<-EOF, 1
+    1 . .
+    . . .
+    EOF
+    @analyser.probability_of_mine_at(0,1).should be_within(0.001).of(0.333)
+  end
+
+  it 'should calculate mine placement probability considering adjacent revealed cells and their adjacent mines' do
+    field <<-EOF, 1
+    1 . .
+    1 . .
+    EOF
+    @analyser.probability_of_mine_at(0,1).should be_within(0.001).of(0.5)
+  end
+
   it 'should iterate over all cells' do
     field <<-EOF
     * 1
