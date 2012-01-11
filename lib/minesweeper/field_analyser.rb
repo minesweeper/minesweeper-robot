@@ -1,4 +1,5 @@
 require 'minesweeper/cell_sequence'
+require 'ruby-debug'
 
 class Minesweeper::FieldAnalyser
   include Enumerable
@@ -37,6 +38,10 @@ class Minesweeper::FieldAnalyser
     each do |r,c,s|
       next unless s == 'unclicked'
       new_likelihood = probability_of_mine_at r,c
+      if new_likelihood < 0.0 or new_likelihood > 1.0
+        puts "Calculated crazy likelihood of #{new_likelihood}"
+        debugger
+      end
       cell,likelihood = [r,c], new_likelihood if new_likelihood < likelihood
     end
     puts "Picked cell #{cell.inspect} with likelihood #{likelihood}"

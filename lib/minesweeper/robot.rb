@@ -20,13 +20,13 @@ class Minesweeper::Robot
     beginner =     {rows: 9,  cols: 9,  mineCount: 10}
     intermediate = {rows: 16, cols: 16, mineCount: 40}
     expert =       {rows: 16, cols: 30, mineCount: 99}
-    options = intermediate.merge options
-    rows,cols,mines = *%w{rows cols mineCount}.map {|key| options[key.to_sym] }
+    @options = intermediate.merge options
+    rows,cols,mineCount = *%w{rows cols mineCount}.map {|key| options[key.to_sym] }
     won = 0
     lost = 0
     while true
-      @game.reset rows: rows, cols: cols, mineCount: mines
-      make_move rows, cols, mines
+      @game.reset rows: rows, cols: cols, mineCount: mineCount
+      make_move rows, cols, mineCount
       won += 1 if @game.won?
       lost += 1 if @game.lost?
       puts "won: #{won}, lost: #{lost}"
@@ -58,6 +58,6 @@ class Minesweeper::Robot
   private
 
   def field
-    Minesweeper::FieldAnalyser.new @game.field
+    Minesweeper::FieldAnalyser.new @game.field, @options.mineCount
   end
 end
