@@ -21,11 +21,11 @@ class Minesweeper::Robot
     intermediate = {rows: 16, cols: 16, mineCount: 40}
     expert =       {rows: 16, cols: 30, mineCount: 99}
     @options = intermediate.merge options
-    rows,cols,mineCount = *%w{rows cols mineCount}.map {|key| options[key.to_sym] }
+    rows,cols,mineCount = *%w{rows cols mineCount}.map {|key| @options[key.to_sym] }
     won = 0
     lost = 0
     while true
-      @game.reset rows: rows, cols: cols, mineCount: mineCount
+      @game.reset @options
       make_move rows, cols, mineCount
       won += 1 if @game.won?
       lost += 1 if @game.lost?
