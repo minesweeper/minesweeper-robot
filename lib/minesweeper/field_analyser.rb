@@ -25,7 +25,7 @@ class Minesweeper::FieldAnalyser
     current = remaining_mine_count.to_f/count_for_status('unclicked')
     each_neighbour_of row, col do |r,c,s|
       with_adjacent_mine_count s do |count|
-        chance = count.to_f/neighbours_of(r,c).unclicked.count
+        chance = (count-neighbours_of(r,c).marked.count).to_f/neighbours_of(r,c).unclicked.count
         current = chance if chance > current
       end
     end
