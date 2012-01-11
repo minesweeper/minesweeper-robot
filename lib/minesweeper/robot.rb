@@ -52,7 +52,7 @@ class Minesweeper::Robot
       puts "Clicking safe cell #{safe_cells.first.inspect}"
       return safe_cells.first
     end
-    field.all.unclicked.tap {|it| puts "Clicking next cell #{it.first.inspect} (no safe cells)"}.first
+    field.least_likely_to_be_mined.tap {|it| puts "Guessing next cell #{it.inspect}"}
   end
 
   private

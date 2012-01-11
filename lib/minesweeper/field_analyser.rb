@@ -32,6 +32,17 @@ class Minesweeper::FieldAnalyser
     current
   end
 
+  def least_likely_to_be_mined
+    cell,likelihood  = nil, 1.0
+    each do |r,c,s|
+      next unless s == 'unclicked'
+      new_likelihood = probability_of_mine_at r,c
+      cell,likelihood = [r,c], new_likelihood if new_likelihood < likelihood
+    end
+    puts "Picked cell #{cell.inspect} with likelihood #{likelihood}"
+    cell
+  end
+
   def with_adjacent_mine_count status
     yield $1.to_i if status =~ /mines(\d)/
   end
