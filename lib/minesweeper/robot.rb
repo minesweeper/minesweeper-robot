@@ -58,6 +58,6 @@ class Minesweeper::Robot
   private
 
   def field
-    Minesweeper::FieldAnalyser.new @game.field, @options.mineCount
+    Minesweeper::FieldAnalyser.new @game.field, @options[:mineCount]
   end
 end
