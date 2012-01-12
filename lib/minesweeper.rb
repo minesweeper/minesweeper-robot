@@ -8,7 +8,14 @@ module Minesweeper
     end
   end
 
+  def self.consecutive? *numbers
+    (numbers.min..numbers.max).to_a == numbers.sort
+  end
+
   def self.adjacent? *cells
     return false unless cells.size > 1
+    rows = cells.map {|cell| cell[0]}.uniq
+    cols = cells.map {|cell| cell[1]}.uniq
+    (rows.size == 1 and consecutive? *cols) or (cols.size == 1 and consecutive? *rows)
   end
 end
