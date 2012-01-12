@@ -26,7 +26,7 @@ class Minesweeper::Robot
     beginner =     {rows: 9,  cols: 9,  mineCount: 10}
     intermediate = {rows: 16, cols: 16, mineCount: 40}
     expert =       {rows: 16, cols: 30, mineCount: 99}
-    @options = beginner.merge options
+    @options = expert.merge options
     rows,cols,mineCount = *%w{rows cols mineCount}.map {|key| @options[key.to_sym] }
     won = 0
     games = 1
@@ -39,7 +39,7 @@ class Minesweeper::Robot
         won += 1
         fastest_time ||= time
         fastest_time = time if time < fastest_time
-        puts "Won in #{time} seconds (fastest #{fastest_time})"
+        puts "Won in #{time} seconds (fastest time is #{fastest_time} seconds)"
       end
       puts "Summary: Won #{won}/#{games}"
     end
