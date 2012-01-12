@@ -136,7 +136,8 @@ class Minesweeper::FieldAnalyser
         else
           intersecting_clusters_for(row,col).each do |cluster|
             unclicked_cells_outside_cluster = unclicked_neighbours.all - cluster.cells
-            if mine_count == (marked_count + cluster.count + unclicked_cells_outside_cluster.count)
+            if !unclicked_cells_outside_cluster.empty? and mine_count == (marked_count + cluster.count + unclicked_cells_outside_cluster.count)
+              puts "    #{unclicked_cells_outside_cluster.inspect} seem likely to be mines considering #{[row,col].inspect} and cluster #{cluster.cells} (#{cluster.count})"
               cells += unclicked_cells_outside_cluster
             end
           end
