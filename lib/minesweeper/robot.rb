@@ -42,11 +42,12 @@ class Minesweeper::Robot
         puts "Won in #{time} seconds (fastest time is #{fastest_time} seconds)"
       end
       puts "Summary: Won #{won}/#{games}"
+      games += 1
     end
   end
 
   def play_game rows, cols, mines
-    turn = 0
+    turn = 1
     while true
       return if @game.finished?
       puts "  Turn #{turn}"
