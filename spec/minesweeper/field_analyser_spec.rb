@@ -198,7 +198,7 @@ describe Minesweeper::FieldAnalyser do
     1 2 2 .
     . . . .
     EOF
-    pending { @analyser.obvious_mines.should == [[2,2]] }
+    @analyser.obvious_mines.should == [[2,2]]
   end
 
   describe 'clusters' do

@@ -133,6 +133,13 @@ class Minesweeper::FieldAnalyser
         unclicked_neighbours = neighbours_of(row,col).unclicked
         if mine_count == (marked_count + unclicked_neighbours.count)
           cells += unclicked_neighbours.all
+        else
+          intersecting_clusters_for(row,col).each do |cluster|
+            unclicked_cells_outside_cluster = unclicked_neighbours.all - cluster.cells
+            if mine_count == (marked_count + cluster.count + unclicked_cells_outside_cluster.count)
+              cells += unclicked_cells_outside_cluster
+            end
+          end
         end
       end
     end

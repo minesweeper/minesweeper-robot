@@ -2,7 +2,7 @@ require 'minesweeper'
 require 'set'
 
 class Minesweeper::MineCluster
-  attr_reader :count
+  attr_reader :count, :cells
 
   def initialize count, cells
     @cells, @count = cells, count
