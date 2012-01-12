@@ -201,16 +201,17 @@ describe Minesweeper::FieldAnalyser do
     pending { @analyser.obvious_mines.should == [[2,2]] }
   end
 
-  describe 'clusters_around' do
+  describe 'clusters' do
     it 'should find a cluster around a numbered cell' do
       field <<-EOF
       0 0 0 .
       1 2 2 .
       . . . .
       EOF
-      cluster = stub 'cluster'
-      Minesweeper::MineCluster.should_receive(:new).once.with(1,[[2,0], [2,1]]).and_return cluster
-      @analyser.clusters_around(1,0).should == [cluster]
+      cluster1,cluster2 = stub('cluster1'),stub('cluster2')
+      Minesweeper::MineCluster.should_receive(:new).once.with(1,[[2,0],[2,1]]).and_return cluster1
+      Minesweeper::MineCluster.should_receive(:new).once.with(2,[[2,0],[2,1],[2,2]]).and_return cluster2
+      @analyser.clusters.should == [cluster1, cluster2]
     end
 
     it 'should not find a cluster around a numbered cell considering marked cells' do
@@ -220,7 +221,7 @@ describe Minesweeper::FieldAnalyser do
       . . .
       EOF
       Minesweeper::MineCluster.should_not_receive :new
-      @analyser.clusters_around(1,0).should == []
+      @analyser.clusters.should == []
     end
   end
 end

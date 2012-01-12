@@ -107,13 +107,26 @@ class Minesweeper::FieldAnalyser
     cells.uniq
   end
 
+  def clusters
+    clusters = []
+    each do |row, col, status|
+      with_adjacent_mine_count status do |mine_count|
+        clusters += clusters_around(row, col)
+      end
+    end
+    clusters
+  end
+
   def obvious_mines
     cells = []
+    all_clusters = clusters
     each do |row, col, status|
       with_adjacent_mine_count status do |mine_count|
         marked_count = neighbours_of(row,col).marked.count
         unclicked_neighbours = neighbours_of(row,col).unclicked
-        cells += unclicked_neighbours.all if mine_count == (marked_count + unclicked_neighbours.count)
+        if mine_count == (marked_count + unclicked_neighbours.count)
+          cells += unclicked_neighbours.all
+        end
       end
     end
     cells.uniq

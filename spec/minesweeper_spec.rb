@@ -48,8 +48,12 @@ describe Minesweeper do
       Minesweeper.adjacent?([0,0],[2,2]).should be_false
     end
 
-    it 'should recognise diagonal arc as adjacent (even that makes no sense)' do
-      Minesweeper.adjacent?([0,0],[1,1],[0,2]).should be_true
+    it 'should not recognise diagonal arc as adjacent' do
+      Minesweeper.adjacent?([0,0],[1,1],[0,2]).should be_false
+    end
+
+    it 'should not recognise right angle as adjacent' do
+      Minesweeper.adjacent?([0, 3], [1, 3], [2, 1], [2, 2], [2, 3]).should be_false
     end
   end
 end

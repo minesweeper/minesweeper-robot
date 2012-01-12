@@ -18,6 +18,6 @@ module Minesweeper
     cols = cells.map {|cell| cell[1]}.uniq
     (rows.size == 1 and consecutive? *cols) or
     (cols.size == 1 and consecutive? *rows) or
-    (consecutive? *cols and consecutive? *rows)
+    (consecutive? *cols and consecutive? *rows and cells.size == 2)
   end
 end
