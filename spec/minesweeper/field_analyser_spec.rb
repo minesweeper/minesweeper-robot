@@ -191,4 +191,13 @@ describe Minesweeper::FieldAnalyser do
     EOF
     @analyser.obvious_mines.should == []
   end
+
+  it 'should detect an obvious mine taking an adjacent cell into consideration' do
+    field <<-EOF
+    0 0 0 .
+    1 2 2 .
+    . . . .
+    EOF
+    pending { @analyser.obvious_mines.should == [[2,2]] }
+  end
 end
