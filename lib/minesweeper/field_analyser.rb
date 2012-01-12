@@ -1,6 +1,7 @@
 require 'minesweeper/cell_sequence'
 require 'minesweeper/single_mine_cluster'
 require 'ruby-debug'
+require 'set'
 
 class Minesweeper::FieldAnalyser
   include Enumerable
@@ -112,6 +113,15 @@ class Minesweeper::FieldAnalyser
       end
     end
     clusters
+  end
+
+  def intersecting_clusters_for row, col
+    result = []
+    unclicked = Set.new neighbours_of(row,col).unclicked.all
+    clusters.each do |cluster|
+      result << cluster if cluster.subset? unclicked
+    end
+    result
   end
 
   def obvious_mines

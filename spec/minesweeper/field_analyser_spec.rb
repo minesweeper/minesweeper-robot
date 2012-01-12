@@ -223,5 +223,14 @@ describe Minesweeper::FieldAnalyser do
       Minesweeper::MineCluster.should_not_receive :new
       @analyser.clusters.should == []
     end
+
+    it 'should find an intersecting cluster' do
+      field <<-EOF
+      0 0 0 .
+      1 2 2 .
+      . . . .
+      EOF
+      @analyser.intersecting_clusters_for(1,1).size.should == 2
+    end
   end
 end
