@@ -135,70 +135,83 @@ describe Minesweeper::FieldAnalyser do
     ]
   end
 
-  it 'should determine safe cells to left click' do
-    field <<-EOF
-    * 1
-    . .
-    EOF
-    @analyser.safe_cells_to_click.should == [[1,0],[1,1]]
+  describe 'safe cells to click' do
+    it 'should determine safe cells to left click' do
+      field <<-EOF
+      * 1
+      . .
+      EOF
+      @analyser.safe_cells_to_click.should == [[1,0],[1,1]]
+    end
+
+    it 'should determine safe cells to left click' do
+      field <<-EOF
+      * 1 .
+      2 . .
+      * 2 .
+      EOF
+      @analyser.safe_cells_to_click.should == [
+                [0,2],
+          [1,1],[1,2]
+      ]
+    end
+
+    it 'should detect a safe cell to click taking an adjacent cell cluster into consideration' do
+      field <<-EOF
+      0 0 0 .
+      1 1 2 .
+      . . . .
+      EOF
+      pending { @analyser.safe_cells_to_click.should == [[0, 3], [1, 3], [2,2]] }
+    end
   end
 
-  it 'should determine safe cells to left click' do
-    field <<-EOF
-    * 1 .
-    2 . .
-    * 2 .
-    EOF
-    @analyser.safe_cells_to_click.should == [
-              [0,2],
-        [1,1],[1,2]
-    ]
-  end
+  describe 'obvious mines' do
+    it 'should detect an obvious mine' do
+      field <<-EOF
+      . 1
+      1 1
+      EOF
+      @analyser.obvious_mines.should == [[0,0]]
+    end
 
-  it 'should detect an obvious mine' do
-    field <<-EOF
-    . 1
-    1 1
-    EOF
-    @analyser.obvious_mines.should == [[0,0]]
-  end
+    it 'should detect an obvious mine' do
+      field <<-EOF
+      . 2 .
+      1 2 1
+      . . .
+      EOF
+      @analyser.obvious_mines.should == [[0,0], [0,2]]
+    end
 
-  it 'should detect an obvious mine' do
-    field <<-EOF
-    . 2 .
-    1 2 1
-    . . .
-    EOF
-    @analyser.obvious_mines.should == [[0,0], [0,2]]
-  end
+    it 'should detect an obvious mine' do
+      field <<-EOF
+      . 1 .
+      2 3 2
+      1 . .
+      EOF
+      @analyser.obvious_mines.should == [[0,0], [2,1]]
+    end
 
-  it 'should detect an obvious mine' do
-    field <<-EOF
-    . 1 .
-    2 3 2
-    1 . .
-    EOF
-    @analyser.obvious_mines.should == [[0,0], [2,1]]
-  end
+    it 'should detect an obvious mine' do
+      field <<-EOF
+      0 0 1 1 .
+      0 0 1 * .
+      0 0 1 . .
+      1 1 1 . .
+      . . . . .
+      EOF
+      @analyser.obvious_mines.should == []
+    end
 
-  it 'should detect an obvious mine' do
-    field <<-EOF
-    0 0 1 1 .
-    0 0 1 * .
-    0 0 1 . .
-    1 1 1 . .
-    . . . . .
-    EOF
-    @analyser.obvious_mines.should == []
-  end
-
-  it 'should detect an obvious mine taking an adjacent cell cluster into consideration' do
-    field <<-EOF
-    0 0 0 .
-    1 2 2 .
-    . . . .
-    EOF
-    @analyser.obvious_mines.should == [[2,2]]
+    it 'should detect an obvious mine taking an adjacent cell cluster into consideration' do
+      field <<-EOF
+      0 0 0 .
+      1 2 2 .
+      . . . .
+      EOF
+      @analyser.obvious_mines.should == [[2,2]]
+    end
   end
 
   describe 'clusters' do
