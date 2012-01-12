@@ -27,15 +27,12 @@ class Minesweeper::FieldAnalyser
     @field[row][col]
   end
 
-  def are_adjacent? cells
-  end
-
   def clusters_around row, col
     clusters = []
     with_adjacent_mine_count(status_at(row,col)) do |count|
       #remaining_mine_count = count - neighbours_of(row, col).mined
       unclicked_cells = neighbours_of(row, col).unclicked.all
-      clusters += unclicked_cells if are_adjacent? unclicked_cells
+      clusters << Minesweeper::MineCluster.new(count, unclicked_cells) if Minesweeper.adjacent? *unclicked_cells
     end
     clusters
   end

@@ -192,7 +192,7 @@ describe Minesweeper::FieldAnalyser do
     @analyser.obvious_mines.should == []
   end
 
-  it 'should detect an obvious mine taking an adjacent cell into consideration' do
+  it 'should detect an obvious mine taking an adjacent cell cluster into consideration' do
     field <<-EOF
     0 0 0 .
     1 2 2 .
@@ -209,8 +209,8 @@ describe Minesweeper::FieldAnalyser do
       . . . .
       EOF
       cluster = stub 'cluster'
-      Minesweeper::SingleMineCluster.should_receive(:new).once.with([[2,0],[2,1]]).and_return cluster
-      pending { @analyser.clusters_around(1,0).should == [cluster] }
+      Minesweeper::MineCluster.should_receive(:new).once.with(1,[[2,0], [2,1]]).and_return cluster
+      @analyser.clusters_around(1,0).should == [cluster]
     end
   end
 end

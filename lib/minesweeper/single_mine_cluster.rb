@@ -1,6 +1,6 @@
 require 'minesweeper'
 
-class Minesweeper::SingleMineCluster
-  def initialize cells
+class Minesweeper::MineCluster
+  def initialize count, cells
   end
 end

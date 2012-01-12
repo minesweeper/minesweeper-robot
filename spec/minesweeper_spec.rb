@@ -47,5 +47,9 @@ describe Minesweeper do
     it 'should not recognise top left to bottom right diagonally non adjacent cells as adjacent' do
       Minesweeper.adjacent?([0,0],[2,2]).should be_false
     end
+
+    it 'should recognise diagonal arc as adjacent (even that makes no sense)' do
+      Minesweeper.adjacent?([0,0],[1,1],[0,2]).should be_true
+    end
   end
 end
