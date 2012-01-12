@@ -212,5 +212,15 @@ describe Minesweeper::FieldAnalyser do
       Minesweeper::MineCluster.should_receive(:new).once.with(1,[[2,0], [2,1]]).and_return cluster
       @analyser.clusters_around(1,0).should == [cluster]
     end
+
+    it 'should not find a cluster around a numbered cell considering marked cells' do
+      field <<-EOF
+      1 1 .
+      1 * .
+      . . .
+      EOF
+      Minesweeper::MineCluster.should_not_receive :new
+      pending { @analyser.clusters_around(1,0).should == [] }
+    end
   end
 end
