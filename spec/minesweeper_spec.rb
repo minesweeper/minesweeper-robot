@@ -35,5 +35,17 @@ describe Minesweeper do
     it 'should not recognise three non-adjacent vertical cells as adjacent' do
       Minesweeper.adjacent?([0,0],[2,0],[3,0]).should be_false
     end
+
+    it 'should recognise top left to bottom right diagonally adjacent cells as adjacent' do
+      Minesweeper.adjacent?([0,0],[1,1]).should be_true
+    end
+
+    it 'should recognise top right to bottom left diagonally adjacent cells as adjacent' do
+      Minesweeper.adjacent?([0,1],[1,0]).should be_true
+    end
+
+    it 'should not recognise top left to bottom right diagonally non adjacent cells as adjacent' do
+      Minesweeper.adjacent?([0,0],[2,2]).should be_false
+    end
   end
 end

@@ -16,6 +16,8 @@ module Minesweeper
     return false unless cells.size > 1
     rows = cells.map {|cell| cell[0]}.uniq
     cols = cells.map {|cell| cell[1]}.uniq
-    (rows.size == 1 and consecutive? *cols) or (cols.size == 1 and consecutive? *rows)
+    (rows.size == 1 and consecutive? *cols) or
+    (cols.size == 1 and consecutive? *rows) or
+    (consecutive? *cols and consecutive? *rows)
   end
 end
