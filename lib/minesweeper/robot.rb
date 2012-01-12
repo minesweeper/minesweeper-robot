@@ -16,29 +16,41 @@ class Minesweeper::Robot
     [[1,1]]
   end
 
+  def duration
+    start_time = Time.now.to_i
+    yield
+    Time.now.to_i - start_time
+  end
+
   def play options={}
     beginner =     {rows: 9,  cols: 9,  mineCount: 10}
     intermediate = {rows: 16, cols: 16, mineCount: 40}
     expert =       {rows: 16, cols: 30, mineCount: 99}
-    @options = expert.merge options
+    @options = beginner.merge options
     rows,cols,mineCount = *%w{rows cols mineCount}.map {|key| @options[key.to_sym] }
     won = 0
-    lost = 0
+    games = 1
+    fastest_time = nil
     while true
+      puts "Game #{games}"
       @game.reset @options
-      make_move rows, cols, mineCount
-      won += 1 if @game.won?
-      lost += 1 if @game.lost?
-      puts "won: #{won}, lost: #{lost}"
+      time = duration { play_game rows, cols, mineCount }
+      if @game.won?
+        won += 1
+        fastest_time ||= time
+        fastest_time = time if time < fastest_time
+        puts "Won in #{time} seconds (fastest #{fastest_time})"
+      end
+      puts "Summary: Won #{won}/#{games}"
     end
   end
 
-  def make_move rows, cols, mines
+  def play_game rows, cols, mines
     turn = 0
     while true
-      return if @game.won? or @game.lost?
-      puts "Turn #{turn}"
-      field.obvious_mines.tap {|it| puts "Marking obvious mines #{it.inspect}"}.each do |mine|
+      return if @game.finished?
+      puts "  Turn #{turn}"
+      field.obvious_mines.tap {|it| puts "    Marking obvious mines #{it.inspect}"}.each do |mine|
         @game.right_click *mine
       end
       @game.click *next_cell
@@ -49,10 +61,10 @@ class Minesweeper::Robot
   def next_cell
     safe_cells = field.safe_cells_to_click
     unless safe_cells.empty?
-      puts "Clicking safe cell #{safe_cells.first.inspect}"
+      puts "    Clicking safe cell #{safe_cells.first.inspect}"
       return safe_cells.first
     end
-    field.least_likely_to_be_mined.tap {|it| puts "Guessing next cell #{it.inspect}"}
+    field.least_likely_to_be_mined
   end
 
   private

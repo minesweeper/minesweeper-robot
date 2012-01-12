@@ -55,13 +55,10 @@ class Minesweeper::FieldAnalyser
     each do |r,c,s|
       next unless s == 'unclicked'
       new_likelihood = probability_of_mine_at r,c
-      if new_likelihood < 0.0 or new_likelihood > 1.0
-        puts "Calculated crazy likelihood of #{new_likelihood}"
-        debugger
-      end
+      raise "Calculated insane probability of #{new_likelihood}" if new_likelihood < 0.0 or new_likelihood > 1.0
       cell,likelihood = [r,c], new_likelihood if new_likelihood < likelihood
     end
-    puts "Picked cell #{cell.inspect} with likelihood #{likelihood}"
+    puts "    Picked cell #{cell.inspect} with likelihood #{likelihood}"
     cell
   end
 
