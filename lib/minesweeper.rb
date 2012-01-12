@@ -7,4 +7,8 @@ module Minesweeper
       row.split.map {|cell| MAP[cell]}
     end
   end
+
+  def self.adjacent? *cells
+    return false unless cells.size > 1
+  end
 end

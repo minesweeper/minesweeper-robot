@@ -213,8 +213,4 @@ describe Minesweeper::FieldAnalyser do
       pending { @analyser.clusters_around(1,0).should == [cluster] }
     end
   end
-
-  describe 'adjacent_to' do
-    it 'should '
-  end
 end
