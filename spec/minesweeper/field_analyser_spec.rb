@@ -200,4 +200,15 @@ describe Minesweeper::FieldAnalyser do
     EOF
     pending { @analyser.obvious_mines.should == [[2,2]] }
   end
+
+  it 'should find a cluster around a numbered cell' do
+    field <<-EOF
+    0 0 0 .
+    1 2 2 .
+    . . . .
+    EOF
+    cluster = stub 'cluster'
+    Minesweeper::SingleMineCluster.should_receive(:new).once.with([[2,0],[2,1]]).and_return cluster
+    @analyser.clusters_around(0,1).should == [cluster]
+  end
 end

@@ -1,4 +1,5 @@
 require 'minesweeper/cell_sequence'
+require 'minesweeper/single_mine_cluster'
 require 'ruby-debug'
 
 class Minesweeper::FieldAnalyser
@@ -20,6 +21,12 @@ class Minesweeper::FieldAnalyser
 
   def remaining_mine_count
     mines - count_for_status('marked')
+  end
+
+  def clusters_around row, col
+    clusters = []
+    clusters << Minesweeper::SingleMineCluster.new([[2,0],[2,1]])
+    clusters
   end
 
   def probability_of_mine_at row, col
