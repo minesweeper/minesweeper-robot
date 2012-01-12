@@ -220,7 +220,7 @@ describe Minesweeper::FieldAnalyser do
       . . .
       EOF
       Minesweeper::MineCluster.should_not_receive :new
-      pending { @analyser.clusters_around(1,0).should == [] }
+      @analyser.clusters_around(1,0).should == []
     end
   end
 end
