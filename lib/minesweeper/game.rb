@@ -14,7 +14,7 @@ class Minesweeper::Game
   end
 
   def initialize
-    @browser = Watir::Browser.start 'file://localhost/scratch/github/markryall/minesweeper/index.html?blank=true'
+    @browser = Watir::Browser.start 'file://localhost/scratch/github/minesweeper/minesweeper.github.com/index.html?blank=true'
   end
 
   def reset options
