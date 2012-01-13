@@ -109,6 +109,7 @@ class Minesweeper::FieldAnalyser
     clusters = []
     each do |row, col, status|
       with_adjacent_mine_count status do |mine_count|
+        next if mine_count == 0
         clusters += clusters_around(row, col)
       end
     end
@@ -133,14 +134,17 @@ class Minesweeper::FieldAnalyser
     all_clusters = clusters
     each do |row, col, status|
       with_adjacent_mine_count status do |mine_count|
+        next if mine_count == 0
         marked_count = neighbours_of(row,col).marked.count
+        remaining_mines = mine_count - marked_count
+        next if remaining_mines == 0
         unclicked_neighbours = neighbours_of(row,col).unclicked
-        if mine_count == (marked_count + unclicked_neighbours.count)
+        if remaining_mines == unclicked_neighbours.count
           cells += unclicked_neighbours.all
         else
           intersecting_clusters_for(row,col).each do |cluster|
             unclicked_cells_outside_cluster = unclicked_neighbours.all - cluster.cells
-            if !unclicked_cells_outside_cluster.empty? and mine_count == (marked_count + cluster.count + unclicked_cells_outside_cluster.count)
+            if !unclicked_cells_outside_cluster.empty? and remaining_mines == (cluster.count + unclicked_cells_outside_cluster.count)
               verbose "    #{unclicked_cells_outside_cluster.inspect} seem likely to be mines considering #{[row,col].inspect} and cluster #{cluster.cells} (#{cluster.count})"
               cells += unclicked_cells_outside_cluster
             end
