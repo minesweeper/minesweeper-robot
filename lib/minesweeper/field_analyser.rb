@@ -1,9 +1,11 @@
+require 'minesweeper/logging'
 require 'minesweeper/cell_sequence'
 require 'minesweeper/single_mine_cluster'
 require 'ruby-debug'
 require 'set'
 
 class Minesweeper::FieldAnalyser
+  include Minesweeper::Logging
   include Enumerable
 
   attr_reader :rows, :cols, :mines
@@ -59,7 +61,7 @@ class Minesweeper::FieldAnalyser
       raise "Calculated insane probability of #{new_likelihood}" if new_likelihood < 0.0 or new_likelihood > 1.0
       cell,likelihood = [r,c], new_likelihood if new_likelihood < likelihood
     end
-    puts "    Picked cell #{cell.inspect} with likelihood #{likelihood}"
+    info "    Picked cell #{cell.inspect} with likelihood #{likelihood}"
     cell
   end
 
@@ -125,10 +127,6 @@ class Minesweeper::FieldAnalyser
     result
   end
 
-  def verbose message
-    puts message if ENV['VERBOSE']
-  end
-
   def obvious_mines
     cells = []
     all_clusters = clusters
@@ -145,7 +143,7 @@ class Minesweeper::FieldAnalyser
           intersecting_clusters_for(row,col).each do |cluster|
             unclicked_cells_outside_cluster = unclicked_neighbours.all - cluster.cells
             if !unclicked_cells_outside_cluster.empty? and remaining_mines == (cluster.count + unclicked_cells_outside_cluster.count)
-              verbose "    #{unclicked_cells_outside_cluster.inspect} seem likely to be mines considering #{[row,col].inspect} and cluster #{cluster.cells} (#{cluster.count})"
+              info "    #{unclicked_cells_outside_cluster.inspect} seem likely to be mines considering #{[row,col].inspect} and cluster #{cluster.cells} (#{cluster.count})"
               cells += unclicked_cells_outside_cluster
             end
           end

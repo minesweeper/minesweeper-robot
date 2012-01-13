@@ -1,6 +1,9 @@
+require 'minesweeper/logging'
 require 'minesweeper/field_analyser'
 
 class Minesweeper::Robot
+  include Minesweeper::Logging
+
   def initialize game
     @game = game
   end
@@ -15,7 +18,7 @@ class Minesweeper::Robot
     beginner =     {rows: 9,  cols: 9,  mineCount: 10}
     intermediate = {rows: 16, cols: 16, mineCount: 40}
     expert =       {rows: 16, cols: 30, mineCount: 99}
-    @options = expert.merge options
+    @options = intermediate.merge options
     rows,cols,mineCount = *%w{rows cols mineCount}.map {|key| @options[key.to_sym] }
     won = 0
     games = 1
@@ -39,12 +42,12 @@ class Minesweeper::Robot
     turn = 1
     while true
       return if @game.finished?
-      puts "  Turn #{turn}"
-      field.obvious_mines.tap {|it| puts "    Marking obvious mines #{it.inspect}"}.each do |mine|
+      info "  Turn #{turn}"
+      field.obvious_mines.tap {|it| info "    Marking obvious mines #{it.inspect}"}.each do |mine|
         @game.right_click *mine
       end
       chosen_cells.each do |cell|
-        puts "    Clicking #{cell.inspect}"
+        info "    Clicking #{cell.inspect}"
         @game.click *cell
       end
       turn += 1
