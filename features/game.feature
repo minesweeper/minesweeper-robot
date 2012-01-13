@@ -37,5 +37,5 @@ Scenario: The user starts a game and then immediately loses
   Then I should lose
   And I should see the game
   """
-  1 ! .
+  1 % .
   """

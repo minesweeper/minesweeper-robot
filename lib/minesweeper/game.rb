@@ -13,8 +13,16 @@ class Minesweeper::Game
     end
   end
 
-  def initialize
-    @browser = Watir::Browser.start 'file://localhost/scratch/github/minesweeper/minesweeper.github.com/index.html?blank=true'
+  def initialize location
+    url = case location
+    when 'al'
+      "file:////Users/alscott/Projects/minesweeper.github.com/index.html?blank=true"
+    when 'mark'
+      "file://localhost/scratch/github/minesweeper/minesweeper.github.com/index.html?blank=true"
+    else
+      "minesweeper.github.com?blank=true"
+    end
+    @browser = Watir::Browser.start url
   end
 
   def reset options
