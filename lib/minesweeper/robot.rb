@@ -43,18 +43,17 @@ class Minesweeper::Robot
       field.obvious_mines.tap {|it| puts "    Marking obvious mines #{it.inspect}"}.each do |mine|
         @game.right_click *mine
       end
-      @game.click *next_cell
+      chosen_cells.each do |cell|
+        puts "    Clicking #{cell.inspect}"
+        @game.click *cell
+      end
       turn += 1
     end
   end
 
-  def next_cell
+  def chosen_cells
     safe_cells = field.safe_cells_to_click
-    unless safe_cells.empty?
-      puts "    Clicking safe cell #{safe_cells.first.inspect}"
-      return safe_cells.first
-    end
-    field.least_likely_to_be_mined
+    safe_cells.empty? ? [field.least_likely_to_be_mined] : safe_cells
   end
 
   private
