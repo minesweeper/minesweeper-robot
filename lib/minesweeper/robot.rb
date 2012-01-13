@@ -14,11 +14,11 @@ class Minesweeper::Robot
     Time.now.to_i - start_time
   end
 
-  def play options={}
+  def play max_games
     beginner =     {rows: 9,  cols: 9,  mineCount: 10}
     intermediate = {rows: 16, cols: 16, mineCount: 40}
     expert =       {rows: 16, cols: 30, mineCount: 99}
-    @options = intermediate.merge options
+    @options = expert
     rows,cols,mineCount = *%w{rows cols mineCount}.map {|key| @options[key.to_sym] }
     won = 0
     games = 1
@@ -34,8 +34,10 @@ class Minesweeper::Robot
         puts "Won in #{time} seconds (fastest time is #{fastest_time} seconds)"
       end
       puts "Summary: Won #{won}/#{games}"
+      break if games >= max_games
       games += 1
     end
+    @game.destroy
   end
 
   def play_game rows, cols, mines
