@@ -5,4 +5,4 @@ $: << File.dirname(__FILE__)+'/../lib'
 require 'minesweeper/robot'
 require 'minesweeper/game'
 
-Minesweeper::Robot.new(Minesweeper::Game.new ARGV[1]).play ARGV.shift.to_i
+Minesweeper::Robot.new(Minesweeper::Game.new ARGV[1], ARGV[2]).play ARGV.shift.to_i

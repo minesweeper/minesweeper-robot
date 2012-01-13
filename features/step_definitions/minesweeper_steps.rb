@@ -4,7 +4,7 @@ Given /^the field$/ do |field_string|
   lines.each_with_index do |row, rindex|
     row.each_with_index { |col, cindex| mines << [rindex, cindex] if col == '*' }
   end
-  Minesweeper.game.reset rows: lines.length, cols: lines.map(&:length).max, mines: mines, mineCount: mines.length
+  Minesweeper.game.build rows: lines.length, cols: lines.map(&:length).max, mines: mines, mineCount: mines.length
 end
 
 When /^I click on the cell in the (\d+).. row and (\d+).. column$/ do |row, col|

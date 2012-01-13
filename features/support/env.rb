@@ -3,7 +3,7 @@ $: << File.dirname(__FILE__)+'/../../lib'
 require 'minesweeper/game'
 
 module Minesweeper
-  @game = Minesweeper::Game.new
+  @game = Minesweeper::Game.new :default, :blank
 
   def self.game
     @game
