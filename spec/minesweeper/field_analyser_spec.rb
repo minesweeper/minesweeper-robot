@@ -90,7 +90,7 @@ describe Minesweeper::FieldAnalyser do
       1 1 2 .
       . . . .
       EOF
-      pending { analyser.safe_cells_to_click.should == [[0, 3], [1, 3], [2,2]] }
+      analyser.safe_cells_to_click.should == [[2,2]]
     end
   end
 
@@ -171,7 +171,7 @@ describe Minesweeper::FieldAnalyser do
       1 2 2 .
       . . . .
       EOF
-      analyser.intersecting_clusters_for(1,1).size.should == 2
+      analyser.intersecting_clusters_for(analyser.clusters,1,1).size.should == 2
     end
   end
 end

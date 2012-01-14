@@ -62,10 +62,10 @@ class Minesweeper::FieldAnalyser
     clusters
   end
 
-  def intersecting_clusters_for row, col
+  def intersecting_clusters_for all_clusters, row, col
     result = []
     unclicked = Set.new field.neighbours_of(row,col).unclicked.all
-    clusters.each do |cluster|
+    all_clusters.each do |cluster|
       result << cluster if cluster.subset? unclicked
     end
     result
@@ -73,10 +73,23 @@ class Minesweeper::FieldAnalyser
 
   def safe_cells_to_click
     cells = []
+    all_clusters = clusters
     field.each do |row, col, status|
       with_adjacent_mine_count status do |mine_count|
+        next if mine_count == 0
         neighbours = field.neighbours_of row, col
-        cells += neighbours.unclicked.all if neighbours.marked.count == mine_count
+        unclicked_neighbours = neighbours.unclicked
+        if neighbours.marked.count == mine_count
+          cells += unclicked_neighbours.all
+        else
+          intersecting_clusters_for(all_clusters,row,col).each do |cluster|
+            unclicked_cells_outside_cluster = unclicked_neighbours.all - cluster.cells
+            if !unclicked_cells_outside_cluster.empty? and mine_count == cluster.count
+              info "    #{unclicked_cells_outside_cluster.inspect} seem likely to be safe to click considering #{[row,col].inspect} and cluster #{cluster.cells} (#{cluster.count})"
+              cells += unclicked_cells_outside_cluster
+            end
+          end
+        end
       end
     end
     cells.uniq
@@ -96,7 +109,7 @@ class Minesweeper::FieldAnalyser
         if remaining_mines == unclicked_neighbours.count
           cells += unclicked_neighbours.all
         else
-          intersecting_clusters_for(row,col).each do |cluster|
+          intersecting_clusters_for(all_clusters,row,col).each do |cluster|
             unclicked_cells_outside_cluster = unclicked_neighbours.all - cluster.cells
             if !unclicked_cells_outside_cluster.empty? and remaining_mines == (cluster.count + unclicked_cells_outside_cluster.count)
               info "    #{unclicked_cells_outside_cluster.inspect} seem likely to be mines considering #{[row,col].inspect} and cluster #{cluster.cells} (#{cluster.count})"
