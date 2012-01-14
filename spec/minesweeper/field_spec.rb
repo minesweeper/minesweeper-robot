@@ -16,4 +16,22 @@ describe Minesweeper::Field do
       [0,0,'marked'],[0,1,'mines1']
     ]
   end
+
+  it 'should determine row count' do
+    field <<-EOF, 1
+    . .
+    . .
+    . .
+    EOF
+    @field.row_count.should == 3
+  end
+
+  it 'should determine col count' do
+    field <<-EOF, 1
+    . .
+    . .
+    . .
+    EOF
+    @field.col_count.should == 2
+  end
 end
