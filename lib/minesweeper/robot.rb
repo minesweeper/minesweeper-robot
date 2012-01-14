@@ -25,6 +25,7 @@ class Minesweeper::Robot
     while true
       puts "Game #{games}"
       @game.reset
+      @guesses = 0
       time = duration { play_game }
       if @game.won?
         won += 1
@@ -32,6 +33,7 @@ class Minesweeper::Robot
         fastest_time = time if time < fastest_time
         puts "Won in #{time} seconds (fastest time is #{fastest_time} seconds)"
       end
+      puts "Guessed #{@guesses} times"
       puts "Summary: Won #{won}/#{games}"
       break if games >= max_games
       games += 1
@@ -57,7 +59,12 @@ class Minesweeper::Robot
 
   def chosen_cells
     safe_cells = analyser.safe_cells_to_click
-    safe_cells.empty? ? [analyser.least_likely_to_be_mined] : safe_cells
+    if safe_cells.empty?
+      @guesses += 1
+      [analyser.least_likely_to_be_mined]
+    else
+      safe_cells
+    end
   end
 
   def analyser
