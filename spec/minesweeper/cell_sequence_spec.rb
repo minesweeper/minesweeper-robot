@@ -1,15 +1,16 @@
 $: << File.dirname(__FILE__)+'/../../lib'
 
-require 'minesweeper/field_analyser'
+require 'minesweeper/field'
 
 describe Minesweeper::CellSequence do
+  include Minesweeper
+
   let :sequence do
-    field = Minesweeper.string_to_field <<-EOF
+    create_field(<<-EOF, 1).neighbours_of 1, 1
     * 1 . .
     2 . . .
     * 2 . .
     EOF
-    sequence = Minesweeper::FieldAnalyser.new(field).neighbours_of 1, 1
   end
 
   it 'should provide a count' do

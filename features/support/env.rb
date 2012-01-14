@@ -13,3 +13,5 @@ end
 at_exit do
   Minesweeper.game.destroy
 end
+
+World Minesweeper

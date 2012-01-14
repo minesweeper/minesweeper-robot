@@ -1,4 +1,5 @@
 require 'minesweeper/logging'
+require 'minesweeper/field'
 require 'minesweeper/field_analyser'
 
 class Minesweeper::Robot
@@ -18,11 +19,6 @@ class Minesweeper::Robot
   end
 
   def play max_games
-    #beginner =     {rows: 9,  cols: 9,  mineCount: 10}
-    #intermediate = {rows: 16, cols: 16, mineCount: 40}
-    #expert =       {rows: 16, cols: 30, mineCount: 99}
-    #@options = expert
-    #rows,cols,mineCount = *%w{rows cols mineCount}.map {|key| @options[key.to_sym] }
     won = 0
     games = 1
     fastest_time = nil
@@ -48,7 +44,7 @@ class Minesweeper::Robot
     while true
       return if @game.finished?
       info "  Turn #{turn}"
-      field.obvious_mines.tap {|it| info "    Marking obvious mines #{it.inspect}"}.each do |mine|
+      analyser.obvious_mines.tap {|it| info "    Marking obvious mines #{it.inspect}"}.each do |mine|
         @game.right_click *mine
       end
       chosen_cells.each do |cell|
@@ -60,13 +56,11 @@ class Minesweeper::Robot
   end
 
   def chosen_cells
-    safe_cells = field.safe_cells_to_click
-    safe_cells.empty? ? [field.least_likely_to_be_mined] : safe_cells
+    safe_cells = analyser.safe_cells_to_click
+    safe_cells.empty? ? [analyser.least_likely_to_be_mined] : safe_cells
   end
 
-  private
-
-  def field
-    Minesweeper::FieldAnalyser.new @game.field, @mine_count
+  def analyser
+    Minesweeper::FieldAnalyser.new Minesweeper::Field.new @game.status_grid, @mine_count
   end
 end

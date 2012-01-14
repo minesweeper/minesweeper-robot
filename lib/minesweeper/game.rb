@@ -22,12 +22,6 @@ class Minesweeper::Game
     :default => ""
   }
 
-  def self.string_to_field field_string
-    field_string.split("\n").map do |row|
-      row.split.map {|cell| MAP[cell]}
-    end
-  end
-
   def initialize location=nil, url_params=nil
     location = (location || :default).to_sym
     url_params = (url_params || :default).to_sym
@@ -58,7 +52,7 @@ class Minesweeper::Game
     "#{a}#{b}#{c}".to_i
   end
 
-  def field
+  def status_grid
     table = Nokogiri::HTML @browser.div(:id, 'g1').table.html
     table.css('tr').map do |row|
       row.css('td').map {|cell| cell[:class] }

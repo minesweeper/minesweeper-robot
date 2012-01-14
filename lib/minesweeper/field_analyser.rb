@@ -5,48 +5,21 @@ require 'ruby-debug'
 require 'set'
 
 class Minesweeper::FieldAnalyser
+  include Minesweeper
   include Minesweeper::Logging
-  include Enumerable
 
-  attr_reader :rows, :cols, :mines
+  attr_reader :field
 
-  def initialize field,mines=1
-    @mines = mines
+  def initialize field
     @field = field
-    @rows = field.length
-    @cols = field.map(&:length).max
-    @size = rows * cols
-  end
-
-  def count_for_status status
-    count {|r,c,s| s == status }
-  end
-
-  def remaining_mine_count
-    mines - count_for_status('marked')
-  end
-
-  def status_at row, col
-    @field[row][col]
-  end
-
-  def clusters_around row, col
-    clusters = []
-    with_adjacent_mine_count(status_at(row,col)) do |count|
-      remaining_mine_count = count - neighbours_of(row, col).marked.count
-      unclicked_cells = neighbours_of(row, col).unclicked.all
-      if Minesweeper.adjacent? *unclicked_cells and remaining_mine_count > 0
-        clusters << Minesweeper::MineCluster.new(remaining_mine_count, unclicked_cells)
-      end
-    end
-    clusters
   end
 
   def probability_of_mine_at row, col
-    current = remaining_mine_count.to_f/count_for_status('unclicked')
-    each_neighbour_of row, col do |r,c,s|
+    current = field.remaining_mine_count.to_f/field.count_for_status('unclicked')
+    field.each_neighbour_of row, col do |r,c,s|
       with_adjacent_mine_count s do |count|
-        chance = (count-neighbours_of(r,c).marked.count).to_f/neighbours_of(r,c).unclicked.count
+        neighbours = field.neighbours_of r,c
+        chance = (count-neighbours.marked.count).to_f/neighbours.unclicked.count
         current = chance if chance > current
       end
     end
@@ -55,7 +28,7 @@ class Minesweeper::FieldAnalyser
 
   def least_likely_to_be_mined
     cell,likelihood  = nil, 1.0
-    each do |r,c,s|
+    field.each do |r,c,s|
       next unless s == 'unclicked'
       new_likelihood = probability_of_mine_at r,c
       raise "Calculated insane probability of #{new_likelihood}" if new_likelihood < 0.0 or new_likelihood > 1.0
@@ -65,51 +38,22 @@ class Minesweeper::FieldAnalyser
     cell
   end
 
-  def with_adjacent_mine_count status
-    yield $1.to_i if status =~ /mines(\d)/
-  end
-
-  def each
-    @rows.times do |row|
-      @cols.times do |col|
-        yield row, col, @field[row][col]
+  def clusters_around row, col
+    clusters = []
+    with_adjacent_mine_count(field.status_at(row,col)) do |count|
+      neighbours = field.neighbours_of row, col
+      remaining_mine_count = count - neighbours.marked.count
+      unclicked_cells = neighbours.unclicked.all
+      if adjacent? *unclicked_cells and remaining_mine_count > 0
+        clusters << Minesweeper::MineCluster.new(remaining_mine_count, unclicked_cells)
       end
     end
-  end
-
-  def all
-    Minesweeper::CellSequence.new self, to_a
-  end
-
-  def each_neighbour_of row,col
-    (row-1..row+1).map do |r|
-      (col-1..col+1).map do |c|
-        yield r, c, @field[r][c] unless (row == r and col == c) or r < 0 or c < 0 or r >= @rows or c >= @cols
-      end
-    end
-  end
-
-  def neighbours_of row, col
-    cells = []
-    each_neighbour_of(row,col) {|r,c,s| cells << [r,c,s] }
-    Minesweeper::CellSequence.new self, cells
-  end
-
-  def safe_cells_to_click
-    cells = []
-    each do |row, col, status|
-      with_adjacent_mine_count status do |mine_count|
-        marked_count = neighbours_of(row,col).marked.count
-        unclicked_neighbours = neighbours_of(row,col).unclicked
-        cells += unclicked_neighbours.all if marked_count == mine_count
-      end
-    end
-    cells.uniq
+    clusters
   end
 
   def clusters
     clusters = []
-    each do |row, col, status|
+    field.each do |row, col, status|
       with_adjacent_mine_count status do |mine_count|
         next if mine_count == 0
         clusters += clusters_around(row, col)
@@ -120,23 +64,35 @@ class Minesweeper::FieldAnalyser
 
   def intersecting_clusters_for row, col
     result = []
-    unclicked = Set.new neighbours_of(row,col).unclicked.all
+    unclicked = Set.new field.neighbours_of(row,col).unclicked.all
     clusters.each do |cluster|
       result << cluster if cluster.subset? unclicked
     end
     result
   end
 
+  def safe_cells_to_click
+    cells = []
+    field.each do |row, col, status|
+      with_adjacent_mine_count status do |mine_count|
+        neighbours = field.neighbours_of row, col
+        cells += neighbours.unclicked.all if neighbours.marked.count == mine_count
+      end
+    end
+    cells.uniq
+  end
+
   def obvious_mines
     cells = []
     all_clusters = clusters
-    each do |row, col, status|
+    field.each do |row, col, status|
       with_adjacent_mine_count status do |mine_count|
         next if mine_count == 0
-        marked_count = neighbours_of(row,col).marked.count
+        neighbours = field.neighbours_of(row,col)
+        marked_count = neighbours.marked.count
         remaining_mines = mine_count - marked_count
         next if remaining_mines == 0
-        unclicked_neighbours = neighbours_of(row,col).unclicked
+        unclicked_neighbours = neighbours.unclicked
         if remaining_mines == unclicked_neighbours.count
           cells += unclicked_neighbours.all
         else
