@@ -46,10 +46,7 @@ class Minesweeper::Game
   end
 
   def mine_count
-    a = "#{@browser.div(:id => 'g1minesRemaining100s').class_name[-1]}"
-    b = "#{@browser.div(:id => 'g1minesRemaining10s').class_name[-1]}"
-    c = "#{@browser.div(:id => 'g1minesRemaining1s').class_name[-1]}"
-    "#{a}#{b}#{c}".to_i
+    @browser.div(:id => 'g1minesRemaining').attribute_value('title').to_i
   end
 
   def status_grid
