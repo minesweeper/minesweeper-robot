@@ -5,10 +5,10 @@ $: << File.dirname(__FILE__)+'/../lib'
 require 'minesweeper/robot'
 require 'minesweeper/game'
 
-mine_count = ARGV.shift.to_i
+game_count = ARGV.shift.to_i
 url = ARGV.shift
 url_params = ARGV.shift
 
 game = Minesweeper::Game.new url, url_params
 robot = Minesweeper::Robot.new game
-robot.play mine_count
+robot.play game_count
