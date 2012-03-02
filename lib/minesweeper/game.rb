@@ -76,6 +76,7 @@ class Minesweeper::Game
   end
 
   def lost?
+    save_screenshot 'lost' if status? 'status dead'
     status? 'status dead'
   end
 
