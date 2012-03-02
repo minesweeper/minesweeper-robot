@@ -64,14 +64,14 @@ class Minesweeper::Game
     cell(row,col).right_click
   end
 
-  def save_screenshot
+  def save_screenshot prefix=''
     dir = "#{Dir.getwd}/screenshots/"
     Dir.mkdir dir unless Dir.exists? dir
-    @browser.driver.save_screenshot "screenshots/#{SecureRandom.uuid}.png"
+    @browser.driver.save_screenshot "screenshots/#{prefix}#{SecureRandom.uuid}.png"
   end
 
   def won?
-    save_screenshot if status? 'status won'
+    save_screenshot 'won' if status? 'status won'
     status? 'status won'
   end
 

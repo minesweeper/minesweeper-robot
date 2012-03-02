@@ -60,6 +60,8 @@ class Minesweeper::Robot
   def chosen_cells
     safe_cells = analyser.safe_cells_to_click
     if safe_cells.empty?
+      info "Making a guess"
+      @game.save_screenshot 'guess'
       @guesses += 1
       [analyser.least_likely_to_be_mined]
     else
