@@ -43,6 +43,7 @@ class Minesweeper::Robot
 
   def play_game
     turn = 1
+    @game.click 0,0
     while true
       return if @game.finished?
       info "  Turn #{turn}"
