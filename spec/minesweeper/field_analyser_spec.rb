@@ -92,6 +92,18 @@ describe Minesweeper::FieldAnalyser do
       EOF
       analyser.safe_cells_to_click.should == [[2,2]]
     end
+
+    it 'should detect a safe cell to click taking an adjacent cell cluster into consideration for alister' do
+      analyse <<-EOF
+      1 2 .
+      * 2 .
+      1 3 .
+      0 1 .
+      1 2 .
+      . . .
+      EOF
+      analyser.safe_cells_to_click.should == [[2,2]]
+    end
   end
 
   describe 'obvious mines' do
@@ -172,6 +184,24 @@ describe Minesweeper::FieldAnalyser do
       . . . .
       EOF
       analyser.intersecting_clusters_for(analyser.clusters,1,1).size.should == 2
+    end
+
+    it 'should find a cluster for alister' do
+      analyse <<-EOF
+      1 2 .
+      * 2 .
+      1 3 .
+      0 1 .
+      1 2 .
+      . . .
+      EOF
+      cluster1,cluster2,cluster3,cluster4,cluster5 = stub('cluster1'),stub('cluster2'),stub('cluster3'),stub('cluster4'),stub('cluster5')
+      Minesweeper::MineCluster.should_receive(:new).once.with(1,[[0,2],[1,2]]).and_return cluster1
+      Minesweeper::MineCluster.should_receive(:new).once.with(1,[[0,2],[1,2],[2,2]]).and_return cluster2
+      Minesweeper::MineCluster.should_receive(:new).once.with(2,[[1,2],[2,2],[3,2]]).and_return cluster3
+      Minesweeper::MineCluster.should_receive(:new).once.with(1,[[2,2],[3,2],[4,2]]).and_return cluster4
+      Minesweeper::MineCluster.should_receive(:new).once.with(1,[[5,0],[5,1]]).and_return cluster5
+      analyser.clusters.should == [cluster1, cluster2, cluster3, cluster4, cluster5]
     end
   end
 end

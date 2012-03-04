@@ -27,13 +27,17 @@ class Minesweeper::FieldAnalyser
   end
 
   def least_likely_to_be_mined
-    cell,likelihood  = nil, 1.0
+    cells,likelihood  = [], 1.0
     field.each do |r,c,s|
       next unless s == 'unclicked'
       new_likelihood = probability_of_mine_at r,c
       raise "Calculated insane probability of #{new_likelihood}" if new_likelihood < 0.0 or new_likelihood > 1.0
-      cell,likelihood = [r,c], new_likelihood if new_likelihood < likelihood
+      cells << [r,c] if new_likelihood == likelihood
+      cells,likelihood = [[r,c]], new_likelihood if new_likelihood < likelihood
     end
+
+    #cell = cells[rand(cells.size)] #random click
+    cell = cells.first
     info "    Picked cell #{cell.inspect} with likelihood #{likelihood}"
     cell
   end
@@ -84,7 +88,7 @@ class Minesweeper::FieldAnalyser
         else
           intersecting_clusters_for(all_clusters,row,col).each do |cluster|
             unclicked_cells_outside_cluster = unclicked_neighbours.all - cluster.cells
-            if !unclicked_cells_outside_cluster.empty? and mine_count == cluster.count
+            if !unclicked_cells_outside_cluster.empty? and mine_count - neighbours.marked.count == cluster.count
               info "    #{unclicked_cells_outside_cluster.inspect} seem likely to be safe to click considering #{[row,col].inspect} and cluster #{cluster.cells} (#{cluster.count})"
               cells += unclicked_cells_outside_cluster
             end
