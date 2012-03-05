@@ -93,7 +93,7 @@ describe Minesweeper::FieldAnalyser do
       analyser.safe_cells_to_click.should == [[2,2]]
     end
 
-    it 'should detect a safe cell to click taking an adjacent cell cluster into consideration for alister' do
+    it 'should detect a safe cell to click taking an adjacent cell cluster with marked mines into consideration' do
       analyse <<-EOF
       1 2 .
       * 2 .
@@ -152,6 +152,18 @@ describe Minesweeper::FieldAnalyser do
       EOF
       analyser.obvious_mines.should == [[2,2]]
     end
+
+    it 'should detect an obvious mine taking multiple adjacent cell clusters into consideration' do
+      analyse <<-EOF
+      0 0 1
+      0 . .
+      0 2 .
+      0 4 .
+      * * .
+      . . .
+      EOF
+      analyser.obvious_mines.should == [[4,2]]
+    end
   end
 
   describe 'clusters' do
@@ -186,7 +198,7 @@ describe Minesweeper::FieldAnalyser do
       analyser.intersecting_clusters_for(analyser.clusters,1,1).size.should == 2
     end
 
-    it 'should find a cluster for alister' do
+    it 'should find a cluster taking into acccount marked mines' do
       analyse <<-EOF
       1 2 .
       * 2 .
@@ -202,6 +214,23 @@ describe Minesweeper::FieldAnalyser do
       Minesweeper::MineCluster.should_receive(:new).once.with(1,[[2,2],[3,2],[4,2]]).and_return cluster4
       Minesweeper::MineCluster.should_receive(:new).once.with(1,[[5,0],[5,1]]).and_return cluster5
       analyser.clusters.should == [cluster1, cluster2, cluster3, cluster4, cluster5]
+    end
+
+    it 'should find a derived cluster' do
+      analyse <<-EOF
+      0 0 1
+      0 . .
+      0 2 .
+      0 4 .
+      * * .
+      . . .
+      EOF
+      clusters = analyser.clusters
+      clusters.count.should == 2
+      derived_clusters = analyser.derived_clusters clusters
+      derived_clusters.count.should == 1
+      derived_clusters.first.count.should == 1
+      derived_clusters.first.cells.should == [[2,2],[3,2]]
     end
   end
 end

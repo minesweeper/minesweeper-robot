@@ -75,9 +75,33 @@ class Minesweeper::FieldAnalyser
     result
   end
 
+  def derived_clusters all_clusters
+    clusters = []
+    field.each do |row, col, status|
+      with_adjacent_mine_count status do |count|
+        next if count == 0
+        neighbours = field.neighbours_of row, col
+        remaining_mine_count = count - neighbours.marked.count
+        unclicked = Set.new neighbours.unclicked.all
+        all_clusters.each do |cluster|
+          if cluster.subset?(unclicked)
+            other_cells = unclicked - Set.new(cluster.cells)
+            count_in_new_cluster = remaining_mine_count - cluster.count
+            if adjacent?(*other_cells) and remaining_mine_count > 0
+              clusters << Minesweeper::MineCluster.new(count_in_new_cluster, other_cells.to_a)
+            end
+          end
+        end
+      end
+    end
+    clusters
+  end
+
+
   def safe_cells_to_click
     cells = []
     all_clusters = clusters
+    all_clusters += derived_clusters(clusters)
     field.each do |row, col, status|
       with_adjacent_mine_count status do |mine_count|
         next if mine_count == 0
@@ -102,6 +126,7 @@ class Minesweeper::FieldAnalyser
   def obvious_mines
     cells = []
     all_clusters = clusters
+    all_clusters += derived_clusters(clusters)
     field.each do |row, col, status|
       with_adjacent_mine_count status do |mine_count|
         next if mine_count == 0
