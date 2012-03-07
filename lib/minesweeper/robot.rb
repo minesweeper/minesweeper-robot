@@ -5,6 +5,8 @@ require 'minesweeper/field_analyser'
 class Minesweeper::Robot
   include Minesweeper::Logging
 
+  attr_reader :guesses
+
   def initialize game
     @game = game
     @mine_count = @game.mine_count
@@ -42,6 +44,7 @@ class Minesweeper::Robot
   end
 
   def play_game
+    @guesses ||= 0
     turn = 1
     @game.click 0,0
     while true
