@@ -27,5 +27,6 @@ Then /^I can win the game without guessing$/ do
   robot = Minesweeper::Robot.new Minesweeper.game
   robot.play_game
   Minesweeper.game.should be_won
+  robot.guesses.should == 0
   puts "Time taken: #{Minesweeper.game.time_taken}"
 end
