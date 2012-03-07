@@ -22,3 +22,10 @@ end
 Then /^I should see the game$/ do |field_string|
   Minesweeper.game.status_grid.should == string_to_status_grid(field_string)
 end
+
+Then /^I can win the game without guessing$/ do
+  robot = Minesweeper::Robot.new Minesweeper.game
+  robot.play_game
+  Minesweeper.game.should be_won
+  puts "Time taken: #{Minesweeper.game.time_taken}"
+end

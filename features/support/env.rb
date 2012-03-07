@@ -1,6 +1,7 @@
 $: << File.dirname(__FILE__)+'/../../lib'
 
 require 'minesweeper/game'
+require 'minesweeper/robot'
 
 module Minesweeper
   @game = Minesweeper::Game.new :default, :blank

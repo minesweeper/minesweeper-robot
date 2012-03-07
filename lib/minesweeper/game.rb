@@ -84,6 +84,10 @@ class Minesweeper::Game
     won? or lost?
   end
 
+  def time_taken
+    @browser.div(:id => 'g1timer').attribute_value('title').to_i
+  end
+
   def destroy
     @browser.close
   end
