@@ -60,7 +60,14 @@ class Minesweeper::FieldAnalyser
     field.each do |row, col, status|
       with_adjacent_mine_count status do |mine_count|
         next if mine_count == 0
-        clusters += clusters_around(row, col)
+        clusters_around = clusters_around(row, col)
+        clusters_around.each do |c_a|
+          inc = false
+          clusters.each do |c|
+            inc = true if c.count == c_a.count and c.cells == c_a.cells
+          end
+          clusters << c_a unless inc
+        end
       end
     end
     clusters
@@ -97,6 +104,23 @@ class Minesweeper::FieldAnalyser
     clusters
   end
 
+  def non_intersecting_clusters intersecting_clusters
+    non_intersecting_clusters = []
+    intersecting_clusters.each do |cluster|
+      other_clusters  = Array.new(intersecting_clusters)
+      other_clusters.delete cluster
+
+      other_clusters.each do |other_cluster|
+        if (cluster.cells & other_cluster.cells) == []
+          unless non_intersecting_clusters.include? [cluster, other_cluster] or non_intersecting_clusters.include? [other_cluster, cluster]
+            non_intersecting_clusters << [cluster, other_cluster]
+          end
+        end
+      end
+    end
+    non_intersecting_clusters
+  end
+
 
   def safe_cells_to_click
     cells = []
@@ -110,7 +134,18 @@ class Minesweeper::FieldAnalyser
         if neighbours.marked.count == mine_count
           cells += unclicked_neighbours.all
         else
-          intersecting_clusters_for(all_clusters,row,col).each do |cluster|
+          intersecting_clusters = intersecting_clusters_for(all_clusters,row,col)
+          non_intersecting_clusters = non_intersecting_clusters intersecting_clusters
+
+          non_intersecting_clusters.each do |cluster_pair|
+            unclicked_cells_outside_cluster_pair = unclicked_neighbours.all - cluster_pair.first.cells - cluster_pair.last.cells
+            if !unclicked_cells_outside_cluster_pair.empty? and (mine_count - neighbours.marked.count) == (cluster_pair.first.count + cluster_pair.last.count)
+               info "    #{unclicked_cells_outside_cluster_pair.inspect} seem likely to be safe to click considering #{[row,col].inspect} and two clusters #{cluster_pair.first.cells} (#{cluster_pair.first.count}) AND #{cluster_pair.last.cells} (#{cluster_pair.last.count})"
+               cells += unclicked_cells_outside_cluster_pair
+             end
+          end
+
+          intersecting_clusters.each do |cluster|
             unclicked_cells_outside_cluster = unclicked_neighbours.all - cluster.cells
             if !unclicked_cells_outside_cluster.empty? and mine_count - neighbours.marked.count == cluster.count
               info "    #{unclicked_cells_outside_cluster.inspect} seem likely to be safe to click considering #{[row,col].inspect} and cluster #{cluster.cells} (#{cluster.count})"
