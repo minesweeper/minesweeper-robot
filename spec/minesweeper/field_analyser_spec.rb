@@ -174,6 +174,15 @@ describe Minesweeper::FieldAnalyser do
       EOF
       analyser.obvious_mines.should == [[4,2]]
     end
+
+    it 'should detect an obvious mine when taking two non-adjacent cell clusters into consideration' do
+      analyse <<-EOF
+      1 . 3 . 1
+      1 . . . 1
+      EOF
+      analyser.obvious_mines.should == [[1,2]]
+    end
+
   end
 
   describe 'clusters' do
@@ -267,6 +276,19 @@ describe Minesweeper::FieldAnalyser do
       clusters[2].cells.should == [[2,2],[3,2]]
       clusters[3].count.should == 1
       clusters[3].cells.should == [[2,4],[3,4]]
+    end
+
+    it 'should find multiple non-adjacent cell clusters' do
+      analyse <<-EOF
+      1 . 3 . 1
+      1 . . . 1
+      EOF
+      clusters = analyser.clusters
+      clusters.count.should == 2
+      clusters[0].count.should == 1
+      clusters[0].cells.should == [[0,1],[1,1]]
+      clusters[1].count.should == 1
+      clusters[1].cells.should == [[0,3],[1,3]]
     end
   end
 end

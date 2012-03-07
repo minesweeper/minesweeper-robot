@@ -36,8 +36,9 @@ class Minesweeper::FieldAnalyser
       cells,likelihood = [[r,c]], new_likelihood if new_likelihood < likelihood
     end
 
-    #cell = cells[rand(cells.size)] #random click
     cell = cells.first
+    #cell = cells[(cells.size/2).to_i] #middle
+    #cell = cells[rand(cells.size)] #random click
     info "    Picked cell #{cell.inspect} with likelihood #{likelihood}"
     cell
   end
@@ -173,7 +174,18 @@ class Minesweeper::FieldAnalyser
         if remaining_mines == unclicked_neighbours.count
           cells += unclicked_neighbours.all
         else
-          intersecting_clusters_for(all_clusters,row,col).each do |cluster|
+          intersecting_clusters = intersecting_clusters_for all_clusters, row, col
+          non_intersecting_clusters = non_intersecting_clusters intersecting_clusters
+
+          non_intersecting_clusters.each do |cluster_pair|
+            unclicked_cells_outside_cluster_pair = unclicked_neighbours.all - cluster_pair.first.cells - cluster_pair.last.cells
+            if !unclicked_cells_outside_cluster_pair.empty? and (remaining_mines == (cluster_pair.first.count + cluster_pair.last.count + unclicked_cells_outside_cluster_pair.count))
+               info "    #{unclicked_cells_outside_cluster_pair.inspect} seem likely to be mines considering #{[row,col].inspect} and two clusters #{cluster_pair.first.cells} (#{cluster_pair.first.count}) AND #{cluster_pair.last.cells} (#{cluster_pair.last.count})"
+               cells += unclicked_cells_outside_cluster_pair
+             end
+          end
+
+          intersecting_clusters.each do |cluster|
             unclicked_cells_outside_cluster = unclicked_neighbours.all - cluster.cells
             if !unclicked_cells_outside_cluster.empty? and remaining_mines == (cluster.count + unclicked_cells_outside_cluster.count)
               info "    #{unclicked_cells_outside_cluster.inspect} seem likely to be mines considering #{[row,col].inspect} and cluster #{cluster.cells} (#{cluster.count})"
