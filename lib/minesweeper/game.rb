@@ -25,7 +25,8 @@ class Minesweeper::Game
   def initialize location=nil, url_params=nil
     location = (location || :default).to_sym
     url_params = (url_params || :default).to_sym
-    @browser = Watir::Browser.start "#{URLS[location]}#{URLS_PARAMS[url_params]}"
+    Watir::always_locate = false
+    @browser = Watir::Browser.start "#{URLS[location]}#{URLS_PARAMS[url_params]}", ENV['WEB_DRIVER'] || :chrome
   end
 
   def reset
