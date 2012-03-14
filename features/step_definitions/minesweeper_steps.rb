@@ -30,3 +30,7 @@ Then /^I can win the game without guessing$/ do
   robot.guesses.should == 0
   puts "Time taken: #{Minesweeper.game.time_taken}"
 end
+
+Then /^I should finish the game in (.+) seconds or less$/ do |expected_time|
+  Minesweeper.game.time_taken.should be <= expected_time.to_i
+end

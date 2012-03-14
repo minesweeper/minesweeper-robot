@@ -61,3 +61,4 @@ Scenario: The user is efficient at playing expert games
   . . . . . . . . . . . . . . . * . . . . * . * . . . . * . .
   """
   Then I can win the game without guessing
+  And I should finish the game in 30 seconds or less
