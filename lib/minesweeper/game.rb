@@ -11,6 +11,7 @@ class Minesweeper::Game
   URLS = {
       :al => "file:////Users/alscott/Projects/minesweeper.github.com/index.html",
       :mark => "file://localhost/scratch/github/minesweeper/minesweeper.github.com/index.html",
+      :github => "minesweeper.github.com",
       :default => "minesweeper.github.com"
   }
 

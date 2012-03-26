@@ -37,6 +37,7 @@ class Minesweeper::Robot
       end
       puts "Guessed #{@guesses} times"
       puts "Summary: Won #{won}/#{games}"
+      sleep 0.5
       break if games >= max_games
       games += 1
     end
@@ -65,7 +66,7 @@ class Minesweeper::Robot
     safe_cells = analyser.safe_cells_to_click
     if safe_cells.empty?
       info "Making a guess"
-      @game.save_screenshot 'guess'
+      @game.save_screenshot 'guess' if ENV['GUESS_SHOTS']
       @guesses += 1
       [analyser.least_likely_to_be_mined]
     else
