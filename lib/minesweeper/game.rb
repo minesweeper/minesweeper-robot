@@ -5,14 +5,16 @@ require 'json'
 require 'securerandom'
 
 class Minesweeper::Game
+  BASE_PATH = File.expand_path File.dirname(__FILE__)+'/../../..'
+  puts BASE_PATH
   MAP = Hash[*%w{. unclicked * mine}]
   (0..9).each {|index| MAP[index.to_s] = "mines#{index}"}
 
   URLS = {
-      :al => "file:////Users/alscott/Projects/minesweeper.github.com/index.html",
-      :mark => "file://localhost/scratch/github/minesweeper/minesweeper.github.com/index.html",
-      :github => "minesweeper.github.com",
-      :default => "minesweeper.github.com"
+      al: "file:////Users/alscott/Projects/minesweeper.github.com/index.html",
+      local: "file:///#{BASE_PATH}/minesweeper.github.com/index.html",
+      github: "minesweeper.github.com",
+      default: "minesweeper.github.com",
   }
 
   URLS_PARAMS = {
