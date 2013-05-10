@@ -13,8 +13,8 @@ class Minesweeper::Game
   URLS = {
       al: "file:////Users/alscott/Projects/minesweeper.github.com/index.html",
       local: "file:///#{BASE_PATH}/minesweeper.github.com/index.html",
-      github: "minesweeper.github.com",
-      default: "minesweeper.github.com",
+      github: "minesweeper.github.io",
+      default: "minesweeper.github.io",
   }
 
   URLS_PARAMS = {

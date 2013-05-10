@@ -1,7 +1,6 @@
 require 'minesweeper/logging'
 require 'minesweeper/cell_sequence'
 require 'minesweeper/single_mine_cluster'
-require 'ruby-debug'
 require 'set'
 
 class Minesweeper::FieldAnalyser
