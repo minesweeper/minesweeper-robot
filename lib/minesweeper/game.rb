@@ -6,7 +6,6 @@ require 'securerandom'
 
 class Minesweeper::Game
   BASE_PATH = File.expand_path File.dirname(__FILE__)+'/../../..'
-  puts BASE_PATH
   MAP = Hash[*%w{. unclicked * mine}]
   (0..9).each {|index| MAP[index.to_s] = "mines#{index}"}
 
@@ -29,7 +28,7 @@ class Minesweeper::Game
     location = (location || :default).to_sym
     url_params = (url_params || :default).to_sym
     Watir::always_locate = false
-    @browser = Watir::Browser.start "#{URLS[location]}#{URLS_PARAMS[url_params]}", ENV['WEB_DRIVER'] || :firefox
+    @browser = Watir::Browser.start "#{URLS[location]}#{URLS_PARAMS[url_params]}", ENV['WEB_DRIVER'] || :chrome
   end
 
   def reset
