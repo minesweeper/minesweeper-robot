@@ -2,6 +2,7 @@ $: << File.dirname(__FILE__)+'/../../lib'
 
 require 'minesweeper/field'
 require 'minesweeper/field_analyser'
+require 'spec_helper'
 
 describe Minesweeper::FieldAnalyser do
   include Minesweeper
